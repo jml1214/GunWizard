@@ -1,7 +1,6 @@
 package mapandhelpers;
 
 import java.io.File;
-
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -22,6 +21,8 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import Objects.ActorObject;
+import Objects.CharacterObject;
 
 public class Map extends Application{
 	
@@ -68,9 +69,9 @@ public class Map extends Application{
 	    Scene scene = new Scene(pane, viewSizeX, viewSizeY);
 	    
 	    //Logo images
-	    File file1 = new File("/Users/Beta/Documents/workspace/GWZ/Resources/galaxy-string.png");
-	    File file2 = new File("/Users/Beta/Documents/workspace/GWZ/Resources/magic_wizard_hat.png");
-	    File file3 = new File("/Users/Beta/Documents/workspace/GWZ/Resources/AK47.png");
+	    File file1 = new File("galaxy-string.png");
+	    File file2 = new File("magic_wizard_hat.png");
+	    File file3 = new File("AK47.png");
 	    ImageView iv1 = new ImageView(new Image(file1.toURI().toString(),1000,800,false,false));
 	    ImageView iv2 = new ImageView(new Image(file2.toURI().toString(), 500, 500, false, false));
 	    ImageView iv3 = new ImageView(new Image(file3.toURI().toString(),500,500,false,false));
@@ -93,7 +94,7 @@ public class Map extends Application{
 //		b.setMaxHeight(200);
 		pane.getChildren().add(b);
 		
-		String musicFile = "/Users/Beta/Documents/workspace/GWZ/Resources/Swords_Collide-Sound_Explorer-2015600826.mp3";     // For example
+		String musicFile = "Swords_Collide-Sound_Explorer-2015600826.mp3";
 
 		Media sound = new Media(new File(musicFile).toURI().toString());
 		final MediaPlayer mediaPlayer = new MediaPlayer(sound);
@@ -134,14 +135,79 @@ public class Map extends Application{
 //		b.setMaxHeight(200);
 		pane.getChildren().add(b);
 		
-		String musicFile = "/Users/Beta/Documents/workspace/GWZ/Resources/Swords_Collide-Sound_Explorer-2015600826.mp3";
+		String musicFile = "Swords_Collide-Sound_Explorer-2015600826.mp3";
 
 		Media sound = new Media(new File(musicFile).toURI().toString());
 		final MediaPlayer mediaPlayer = new MediaPlayer(sound);
 		// Button press
 		b.setOnAction((event) -> {
 			mediaPlayer.play();
-		    titleScreen(primaryStage);
+		    gameScreen(primaryStage);
 		});
+	}
+	
+	public void gameScreen(Stage primaryStage){
+		StackPane pane = new StackPane();
+		BackgroundFill a = new BackgroundFill(Color.WHITE, null, null);
+		Background background = new Background(new BackgroundFill[] {a});
+		pane.setBackground(background);
+		
+		ActorObject userChar = new CharacterObject();
+		userChar.setPosX(0);
+		userChar.setPosY(100);
+		
+		Circle userPlace = new Circle(50);
+		userPlace.setTranslateX(0);
+		userPlace.setTranslateY(100);
+		userPlace.setFill(Color.RED);
+		
+		pane.getChildren().add(userPlace);
+		
+		Button b = new Button();
+		b.setText("Enter");
+		b.setTranslateX(0);
+		b.setTranslateY(300);
+		b.setStyle("-fx-font-size:40; -fx-background-color:red;");
+//		b.setMaxWidth(200);
+//		b.setMaxHeight(200);
+		pane.getChildren().add(b);
+				
+		b.setOnAction((event) -> {
+			userPlace.setTranslateY(0);
+			userPlace.setTranslateX(0);
+			userChar.setPosY(0);
+			userChar.setPosX(0);
+		});
+		
+		Scene scene = new Scene(pane, viewSizeX, viewSizeY);
+		scene.setOnKeyPressed(e -> {
+			switch (e.getCode()){
+			case DOWN:
+				userChar.setPosY(userChar.getPosY()+100);
+				userPlace.setTranslateY(userChar.getPosY());
+				break;
+			case UP:
+				userChar.setPosY(userChar.getPosY()-100);
+				userPlace.setTranslateY(userChar.getPosY());
+				break;
+			case RIGHT:
+				userChar.setPosX(userChar.getPosX()+100);
+				userPlace.setTranslateX(userChar.getPosX());
+				break;
+			case LEFT:
+				userChar.setPosX(userChar.getPosX()-100);
+				userPlace.setTranslateX(userChar.getPosX());
+				break;
+			case W:
+				
+			default:
+				break;
+			}	
+		});
+		
+		
+		primaryStage.setScene(scene);
+		primaryStage.show();
+		userPlace.requestFocus();
 	}
 }

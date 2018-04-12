@@ -16,6 +16,8 @@ public class ActorObject {
 		objectsInstantiated++;
 		sizeX = 50.0;
 		sizeY = 50.0;
+		posX = 0;
+		posY = 0;
 	}
 	
 	// remember to provide security against unreasonable input

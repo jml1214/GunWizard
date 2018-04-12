@@ -1,6 +1,9 @@
 package mapandhelpers;
 
 import java.io.File;
+
+import javafx.animation.PathTransition;
+import javafx.animation.PathTransition.OrientationType;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -17,10 +20,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import Objects.ActorObject;
 import Objects.CharacterObject;
 
@@ -35,30 +43,10 @@ public class Map extends Application{
 	
 	public void start(Stage primaryStage){
 		titleScreen(primaryStage);
-		
-		
-//		pa.getShape().setOnKeyPressed(e -> {
-//			switch (e.getCode()){
-//			case DOWN:
-//				pa.DOWN();
-//				break;
-//			case UP:
-//				pa.UP();
-//				break;
-//			case RIGHT:
-//				pa.RIGHT();
-//				break;
-//			case LEFT:
-//				pa.LEFT();
-//				break;
-//			default:
-//				break;
-//			}	
-//		});
 	}
 	
 	public void titleScreen(Stage primaryStage){
-		StackPane pane = new StackPane();
+		Pane pane = new StackPane();
 		
 		//Background
 		BackgroundFill a = new BackgroundFill(Color.GREY, null, null);
@@ -83,25 +71,23 @@ public class Map extends Application{
 		wizLogo.setFill(Color.RED);
 		wizLogo.setStroke(Color.ANTIQUEWHITE);
 		pane.getChildren().add(wizLogo);
-		StackPane.setAlignment(wizLogo, Pos.CENTER);
+//		Pane. setAlignment(wizLogo, Pos.CENTER);
 		
+		//Button to enter main menu
 		Button b = new Button();
 		b.setText("Enter");
 		b.setTranslateX(0);
 		b.setTranslateY(300);
 		b.setStyle("-fx-font-size:40; -fx-background-color:red;");
-//		b.setMaxWidth(200);
-//		b.setMaxHeight(200);
 		pane.getChildren().add(b);
 		
+		//Sound effect
 		String musicFile = "Swords_Collide-Sound_Explorer-2015600826.mp3";
-
 		Media sound = new Media(new File(musicFile).toURI().toString());
 		final MediaPlayer mediaPlayer = new MediaPlayer(sound);
 		
 		// Button press
 		b.setOnAction((event) -> {
-			
 			mediaPlayer.play();
 		    mainMenu(primaryStage);
 		});
@@ -114,7 +100,7 @@ public class Map extends Application{
 	}
 	
 	public void mainMenu(Stage primaryStage){
-		StackPane pane = new StackPane();
+		Pane pane = new StackPane();
 		
 		//Background
 		BackgroundFill a = new BackgroundFill(Color.GREY, null, null);
@@ -147,21 +133,26 @@ public class Map extends Application{
 	}
 	
 	public void gameScreen(Stage primaryStage){
-		StackPane pane = new StackPane();
+		Pane pane = new StackPane();
 		BackgroundFill a = new BackgroundFill(Color.WHITE, null, null);
 		Background background = new Background(new BackgroundFill[] {a});
 		pane.setBackground(background);
 		
 		ActorObject userChar = new CharacterObject();
-		userChar.setPosX(0);
-		userChar.setPosY(100);
 		
 		Circle userPlace = new Circle(50);
 		userPlace.setTranslateX(0);
-		userPlace.setTranslateY(100);
+		userPlace.setTranslateY(0);
 		userPlace.setFill(Color.RED);
 		
 		pane.getChildren().add(userPlace);
+		
+		File akFile = new File("AK47.png");
+		ActorObject ak47 = new ActorObject();
+	    ImageView akIv = new ImageView(new Image(akFile.toURI().toString(),ak47.getSizeX(),ak47.getSizeY(),false,false));
+	    pane.getChildren().add(akIv);
+	    ak47.setPosX(userChar.getPosX()+50);
+	    akIv.setTranslateX(ak47.getPosX()+50);
 		
 		Button b = new Button();
 		b.setText("Enter");
@@ -183,31 +174,67 @@ public class Map extends Application{
 		scene.setOnKeyPressed(e -> {
 			switch (e.getCode()){
 			case DOWN:
+				userPlace.requestFocus();
 				userChar.setPosY(userChar.getPosY()+100);
 				userPlace.setTranslateY(userChar.getPosY());
+				
+				akIv.requestFocus();
+				ak47.setPosY(userChar.getPosY()+50);
+				akIv.setTranslateY(ak47.getPosY());
 				break;
 			case UP:
+				userPlace.requestFocus();
 				userChar.setPosY(userChar.getPosY()-100);
 				userPlace.setTranslateY(userChar.getPosY());
+				
+				akIv.requestFocus();
+				ak47.setPosY(userChar.getPosY()-50);
+				akIv.setTranslateY(ak47.getPosY());
 				break;
 			case RIGHT:
+				userPlace.requestFocus();
 				userChar.setPosX(userChar.getPosX()+100);
 				userPlace.setTranslateX(userChar.getPosX());
+				
+				akIv.requestFocus();
+				ak47.setPosX(userChar.getPosX()+50);
+				akIv.setTranslateX(ak47.getPosX());
 				break;
 			case LEFT:
+				userPlace.requestFocus();
 				userChar.setPosX(userChar.getPosX()-100);
 				userPlace.setTranslateX(userChar.getPosX());
+				
+				akIv.requestFocus();
+				ak47.setPosX(userChar.getPosX()-50);
+				akIv.setTranslateX(ak47.getPosX());
 				break;
 			case W:
-				
+				Rectangle rect2 = new Rectangle();                 
+				rect2.setX(500);
+				rect2.setY(500);
+				rect2.setWidth(100);
+				rect2.setHeight(100);
+				rect2.setFill(Color.BLUE);
+				pane.getChildren().addAll(rect2);
+				Path path = new Path();
+				path.getElements().add(new MoveTo(0, 0));
+				path.getElements().add(new LineTo(0, 100));
+
+				PathTransition pathTransition = new PathTransition();
+				pathTransition.setDuration(Duration.millis(10000));
+				pathTransition.setNode(rect2);
+				pathTransition.setPath(path);
+				pathTransition.setOrientation(OrientationType.NONE);
+				pathTransition.setAutoReverse(true);
+				pathTransition.play();
 			default:
 				break;
 			}	
 		});
 		
-		
 		primaryStage.setScene(scene);
 		primaryStage.show();
-		userPlace.requestFocus();
+		
 	}
 }

@@ -5,11 +5,15 @@ import java.io.File;
 import javafx.animation.PathTransition;
 import javafx.animation.PathTransition.OrientationType;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
@@ -26,6 +30,7 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -89,7 +94,7 @@ public class Map extends Application{
 		// Button press
 		b.setOnAction((event) -> {
 			mediaPlayer.play();
-		    mainMenu(primaryStage);
+		    loginScreen(primaryStage);
 		});
 		
 		//Finalizing view
@@ -128,17 +133,94 @@ public class Map extends Application{
 		// Button press
 		b.setOnAction((event) -> {
 			mediaPlayer.play();
-		    gameScreen(primaryStage);
+		    loginScreen(primaryStage);
 		});
 	}
 	
-	public void gameScreen(Stage primaryStage){
+	public void loginScreen(Stage primaryStage){
+		Pane pane = new StackPane();
+		
+		// get james's image here
+		File file1 = new File("gunwiz_login.png");
+		
+	    ImageView iv1 = new ImageView(new Image(file1.toURI().toString(),1000,800,false,false));
+	    pane.getChildren().add(iv1);
+	    
+	    TextField userName = new TextField();
+	    userName.setMaxWidth(400);
+	    userName.setMaxHeight(20);
+	    userName.setPrefSize(80, 6);
+	    userName.setTranslateX(23);
+	    userName.setTranslateY(-40);
+	    userName.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+	    pane.getChildren().add(userName);
+	    
+	    TextField passWord = new TextField();
+	    passWord.setMaxWidth(400);
+	    passWord.setMaxHeight(20);
+	    passWord.setPrefSize(80, 6);
+	    passWord.setTranslateX(23);
+	    passWord.setTranslateY(105);
+	    passWord.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+	    pane.getChildren().add(passWord);
+	    
+	    Button login = new Button();
+		login.setText("null");
+		login.setTranslateX(-175);
+		login.setTranslateY(275);
+		login.setStyle("-fx-font-size:40; -fx-background-color:red;");
+		login.setMaxWidth(200);
+		login.setMaxHeight(50);
+		login.setVisible(false);
+		pane.getChildren().add(login);
+		
+		Button exit = new Button();
+		exit.setText("null");
+		exit.setTranslateX(295);
+		exit.setTranslateY(275);
+		exit.setStyle("-fx-font-size:40; -fx-background-color:red;");
+		exit.setMaxWidth(200);
+		exit.setMaxHeight(50);
+		exit.setVisible(false);
+		pane.getChildren().add(exit);
+		
+		String musicFile = "Swords_Collide-Sound_Explorer-2015600826.mp3";
+
+		Media sound = new Media(new File(musicFile).toURI().toString());
+		final MediaPlayer mediaPlayer = new MediaPlayer(sound);
+		// Button press
+		login.setOnAction((event) -> {
+			mediaPlayer.play();
+		    if(checkUser()){
+		    	if(checkPass()){
+		    		gameScreen(primaryStage, new CharacterObject());
+		    	}
+		    	invalidPassword(primaryStage);
+		    }
+		    invalidUser(primaryStage);
+		});
+
+	    
+		Scene scene = new Scene(pane, viewSizeX, viewSizeY);
+		primaryStage.setScene(scene);
+		primaryStage.show();
+		
+		userName.setOnKeyPressed(new EventHandler<KeyEvent>(){
+			public void handle(KeyEvent e){
+				if(e.getCode() == KeyCode.ENTER){
+					System.out.println(userName.getText());
+				}
+			}
+		});
+	}
+	
+	public void gameScreen(Stage primaryStage, CharacterObject userChar){
 		Pane pane = new StackPane();
 		BackgroundFill a = new BackgroundFill(Color.WHITE, null, null);
 		Background background = new Background(new BackgroundFill[] {a});
 		pane.setBackground(background);
 		
-		ActorObject userChar = new CharacterObject();
+//		ActorObject userChar = new CharacterObject();
 		
 		Circle userPlace = new Circle(50);
 		userPlace.setTranslateX(0);

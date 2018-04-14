@@ -309,9 +309,10 @@ public class Map extends Application{
 				ActorObject rectRef = new ActorObject();
 				rectRef.setPosX(userChar.getPosX());
 				rectRef.setPosY(userChar.getPosY());
-				rect1.setWidth(100);
-				rect1.setHeight(100);
+				rect1.setWidth(5);
+				rect1.setHeight(5);
 				rect1.setFill(Color.YELLOW);
+				rect1.setStroke(Color.BLACK);
 				rect1.setTranslateX(rectRef.getPosX());
 				rect1.setTranslateY(rectRef.getPosY());
 				pane.getChildren().add(rect1);
@@ -321,17 +322,18 @@ public class Map extends Application{
 					int counter = 0;
 				    @Override
 				    public void run() {
-				    	if (counter < 3){
-				    		rectRef.setPosY(rectRef.getPosY()-100);
+				    	if (counter < 25){
+				    		rectRef.setPosY(rectRef.getPosY()-10);
 				    		rect1.setTranslateY(rectRef.getPosY());
 				    		counter++;
 				    	}
 				    	else{
-							pane.getChildren().remove(rect1);
+//							pane.getChildren().remove(rect1);
+				    		rect1.setVisible(false);
 				    		t.cancel();
 				    	}
 				    }
-				}, 0, 500);
+				}, 0, 100);
 			default:
 				break;
 			}	

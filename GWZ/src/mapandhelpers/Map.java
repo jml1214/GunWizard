@@ -94,7 +94,7 @@ public class Map extends Application{
 		// Button press
 		b.setOnAction((event) -> {
 			mediaPlayer.play();
-		    loginScreen(primaryStage);
+		    loginScreen(primaryStage, 0);
 		});
 		
 		//Finalizing view
@@ -104,40 +104,40 @@ public class Map extends Application{
 		
 	}
 	
-	public void mainMenu(Stage primaryStage){
-		Pane pane = new StackPane();
-		
-		//Background
-		BackgroundFill a = new BackgroundFill(Color.GREY, null, null);
-		Background background = new Background(new BackgroundFill[] {a});
-		pane.setBackground(background);
-		
-		//Setting view sizes and instantiating the scene object for title screen
-	    Scene scene = new Scene(pane, viewSizeX, viewSizeY);
-	    primaryStage.setScene(scene);
-		primaryStage.show();
-		
-		Button b = new Button();
-		b.setText("Enter");
-		b.setTranslateX(0);
-		b.setTranslateY(200);
-		b.setStyle("-fx-font-size:40; -fx-background-color:red;");
-//		b.setMaxWidth(200);
-//		b.setMaxHeight(200);
-		pane.getChildren().add(b);
-		
-		String musicFile = "Swords_Collide-Sound_Explorer-2015600826.mp3";
-
-		Media sound = new Media(new File(musicFile).toURI().toString());
-		final MediaPlayer mediaPlayer = new MediaPlayer(sound);
-		// Button press
-		b.setOnAction((event) -> {
-			mediaPlayer.play();
-		    loginScreen(primaryStage);
-		});
-	}
+//	public void mainMenu(Stage primaryStage){
+//		Pane pane = new StackPane();
+//		
+//		//Background
+//		BackgroundFill a = new BackgroundFill(Color.GREY, null, null);
+//		Background background = new Background(new BackgroundFill[] {a});
+//		pane.setBackground(background);
+//		
+//		//Setting view sizes and instantiating the scene object for title screen
+//	    Scene scene = new Scene(pane, viewSizeX, viewSizeY);
+//	    primaryStage.setScene(scene);
+//		primaryStage.show();
+//		
+//		Button b = new Button();
+//		b.setText("Enter");
+//		b.setTranslateX(0);
+//		b.setTranslateY(200);
+//		b.setStyle("-fx-font-size:40; -fx-background-color:red;");
+////		b.setMaxWidth(200);
+////		b.setMaxHeight(200);
+//		pane.getChildren().add(b);
+//		
+//		String musicFile = "Swords_Collide-Sound_Explorer-2015600826.mp3";
+//
+//		Media sound = new Media(new File(musicFile).toURI().toString());
+//		final MediaPlayer mediaPlayer = new MediaPlayer(sound);
+//		// Button press
+//		b.setOnAction((event) -> {
+//			mediaPlayer.play();
+//		    loginScreen(primaryStage);
+//		});
+//	}
 	
-	public void loginScreen(Stage primaryStage){
+	public void loginScreen(Stage primaryStage, int state){
 		Pane pane = new StackPane();
 		
 		// get james's image here
@@ -195,9 +195,9 @@ public class Map extends Application{
 		    	if(checkPass()){
 		    		gameScreen(primaryStage, new CharacterObject());
 		    	}
-		    	invalidPassword(primaryStage);
+		    	loginScreen(primaryStage, 1);
 		    }
-		    invalidUser(primaryStage);
+		    loginScreen(primaryStage, 2);
 		});
 
 	    

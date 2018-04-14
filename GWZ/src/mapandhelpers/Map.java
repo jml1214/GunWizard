@@ -3,6 +3,9 @@ package mapandhelpers;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import javafx.animation.PathTransition;
 import javafx.animation.PathTransition.OrientationType;
@@ -302,24 +305,39 @@ public class Map extends Application{
 				akIv.setTranslateX(ak47.getPosX());
 				break;
 			case W:
-				Rectangle rect2 = new Rectangle();                 
-				rect2.setX(500);
-				rect2.setY(500);
-				rect2.setWidth(100);
-				rect2.setHeight(100);
-				rect2.setFill(Color.BLUE);
-				pane.getChildren().addAll(rect2);
-				Path path = new Path();
-				path.getElements().add(new MoveTo(0, 0));
-				path.getElements().add(new LineTo(0, 100));
-
-				PathTransition pathTransition = new PathTransition();
-				pathTransition.setDuration(Duration.millis(10000));
-				pathTransition.setNode(rect2);
-				pathTransition.setPath(path);
-				pathTransition.setOrientation(OrientationType.NONE);
-				pathTransition.setAutoReverse(true);
-				pathTransition.play();
+				Rectangle rect1 = new Rectangle();
+				ActorObject rectRef = new ActorObject();
+				rectRef.setPosX(userChar.getPosX());
+				rectRef.setPosY(userChar.getPosY());
+				rect1.setWidth(100);
+				rect1.setHeight(100);
+				rect1.setFill(Color.YELLOW);
+				rect1.setTranslateX(rectRef.getPosX());
+				rect1.setTranslateY(rectRef.getPosY());
+				pane.getChildren().add(rect1);
+				rect1.requestFocus();
+//				while(rectRef.setPosY(rectRef.getPosY()-100)){
+////					Timer timer = new Timer();
+////					timer.schedule(moveRect(rect1, rectRef), 0, 5000);
+//					Runnable helloRunnable = new Runnable() {
+//					    public void run() {
+//					        System.out.println("Hello world");
+//					    }
+//					};
+//
+//					ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+//					executor.scheduleAtFixedRate(helloRunnable, 0, 3, TimeUnit.SECONDS);
+//				}
+				
+				Timer t = new Timer();
+				t.schedule(new TimerTask() {
+				    @Override
+				    public void run() {
+				    	rectRef.setPosY(rectRef.getPosY()-100);
+				    	rect1.setTranslateY(rectRef.getPosY());
+				    }
+				}, 0, 1000);
+				pane.getChildren().remove(rect1);
 			default:
 				break;
 			}	

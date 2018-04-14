@@ -316,28 +316,22 @@ public class Map extends Application{
 				rect1.setTranslateY(rectRef.getPosY());
 				pane.getChildren().add(rect1);
 				rect1.requestFocus();
-//				while(rectRef.setPosY(rectRef.getPosY()-100)){
-////					Timer timer = new Timer();
-////					timer.schedule(moveRect(rect1, rectRef), 0, 5000);
-//					Runnable helloRunnable = new Runnable() {
-//					    public void run() {
-//					        System.out.println("Hello world");
-//					    }
-//					};
-//
-//					ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-//					executor.scheduleAtFixedRate(helloRunnable, 0, 3, TimeUnit.SECONDS);
-//				}
-				
 				Timer t = new Timer();
 				t.schedule(new TimerTask() {
+					int counter = 0;
 				    @Override
 				    public void run() {
-				    	rectRef.setPosY(rectRef.getPosY()-100);
-				    	rect1.setTranslateY(rectRef.getPosY());
+				    	if (counter < 3){
+				    		rectRef.setPosY(rectRef.getPosY()-100);
+				    		rect1.setTranslateY(rectRef.getPosY());
+				    		counter++;
+				    	}
+				    	else{
+							pane.getChildren().remove(rect1);
+				    		t.cancel();
+				    	}
 				    }
-				}, 0, 1000);
-				pane.getChildren().remove(rect1);
+				}, 0, 500);
 			default:
 				break;
 			}	

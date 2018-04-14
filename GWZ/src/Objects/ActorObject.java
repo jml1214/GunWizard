@@ -20,9 +20,14 @@ public class ActorObject {
 		posY = 0;
 	}
 	
-	// remember to provide security against unreasonable input
-	public ActorObject(int x, int y){
+	public ActorObject(String name){
 		this();
+		this.name = name;
+	}
+	// remember to provide security against unreasonable input
+	public ActorObject(int x, int y, String name){
+		this();
+		this.name = name;
 		sizeX = x;
 		sizeY = y;
 	}

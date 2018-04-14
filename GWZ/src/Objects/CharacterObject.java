@@ -26,9 +26,34 @@ public class CharacterObject extends ActorObject {
 		charAbilities = new Abilities();
 		alive = true;
 	}
+	
+	public CharacterObject(String name){
+		super(name);
+		hPoints = DEF_HEALTH_POINTS;
+		mPoints = DEF_MANA_POINTS;
+		maxHealth = DEF_HEALTH_POINTS;
+		maxMana = DEF_MANA_POINTS;
+		charAbilities = new Abilities();
+		alive = true;
+	}
+	
 	// working on parameterized constructor for CharacterObject
-	public CharacterObject(int x, int y, int hp, int mp, int mh, int mm){
-		super(x,y);
+	public CharacterObject(int x, int y, int hp, int mp, int mh, int mm, String name){
+		super(x,y, name);
+		if(!setMaxHealth(mh)){
+			maxHealth = DEF_HEALTH_POINTS;
+		}
+		if(!setMaxMana(mm)){
+			maxMana = DEF_MANA_POINTS;
+		}
+		if(!setHealth(hp)){
+			hPoints = DEF_HEALTH_POINTS;
+		}
+		if(!setMana(mp)){
+			hPoints = DEF_MANA_POINTS;
+		}
+		charAbilities = new Abilities();
+		alive = true;
 	}
 	
 	public int getHealth(){

@@ -1,6 +1,8 @@
 package mapandhelpers;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 import javafx.animation.PathTransition;
 import javafx.animation.PathTransition.OrientationType;
@@ -49,6 +51,8 @@ public class Map extends Application{
 	public void start(Stage primaryStage){
 		titleScreen(primaryStage);
 	}
+	
+	
 	
 	public void titleScreen(Stage primaryStage){
 		Pane pane = new StackPane();
@@ -142,10 +146,24 @@ public class Map extends Application{
 		
 		// get james's image here
 		File file1 = new File("gunwiz_login.png");
+				
+		ImageView iv1 = new ImageView(new Image(file1.toURI().toString(),1000,800,false,false));
+		pane.getChildren().add(iv1);
 		
-	    ImageView iv1 = new ImageView(new Image(file1.toURI().toString(),1000,800,false,false));
-	    pane.getChildren().add(iv1);
-	    
+		if(state == 1){
+			Text wizLogo = new Text(500,100,"Invalid Username");
+		    wizLogo.setFont(Font.font("Comic Sans MS", 20));
+			wizLogo.setFill(Color.RED);
+			pane.getChildren().add(wizLogo);
+		}
+		else if(state == 2){
+			Text wizLogo = new Text(500,100,"Invalid Password");
+		    wizLogo.setFont(Font.font("Comic Sans MS", 20));
+			wizLogo.setFill(Color.RED);
+			wizLogo.setTranslateY(150);
+			pane.getChildren().add(wizLogo);
+		}
+		
 	    TextField userName = new TextField();
 	    userName.setMaxWidth(400);
 	    userName.setMaxHeight(20);
@@ -171,7 +189,7 @@ public class Map extends Application{
 		login.setStyle("-fx-font-size:40; -fx-background-color:red;");
 		login.setMaxWidth(200);
 		login.setMaxHeight(50);
-		login.setVisible(false);
+		login.setVisible(true);
 		pane.getChildren().add(login);
 		
 		Button exit = new Button();
@@ -184,34 +202,26 @@ public class Map extends Application{
 		exit.setVisible(false);
 		pane.getChildren().add(exit);
 		
-		String musicFile = "Swords_Collide-Sound_Explorer-2015600826.mp3";
 
-		Media sound = new Media(new File(musicFile).toURI().toString());
-		final MediaPlayer mediaPlayer = new MediaPlayer(sound);
 		// Button press
 		login.setOnAction((event) -> {
-			mediaPlayer.play();
-		    if(checkUser()){
-		    	if(checkPass()){
+		    if(checkUser(userName.getText())){
+		    	if(checkPass(userName.getText(), passWord.getText())){
 		    		gameScreen(primaryStage, new CharacterObject());
 		    	}
+		    	else{
+		    		loginScreen(primaryStage, 2);
+		    	}
+		    }
+		    else{
 		    	loginScreen(primaryStage, 1);
 		    }
-		    loginScreen(primaryStage, 2);
+		    
 		});
 
-	    
 		Scene scene = new Scene(pane, viewSizeX, viewSizeY);
 		primaryStage.setScene(scene);
 		primaryStage.show();
-		
-		userName.setOnKeyPressed(new EventHandler<KeyEvent>(){
-			public void handle(KeyEvent e){
-				if(e.getCode() == KeyCode.ENTER){
-					System.out.println(userName.getText());
-				}
-			}
-		});
 	}
 	
 	public void gameScreen(Stage primaryStage, CharacterObject userChar){
@@ -318,5 +328,60 @@ public class Map extends Application{
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		
+	}
+	
+	/**
+	* Checks if entered inputed username exists in userPass file.
+	* @return If username is valid for login.
+	*/
+	private boolean checkUser(String input){
+		File file = new File("userPass.txt");
+		Scanner scanner;
+		try {
+			scanner = new Scanner(file);
+			while(scanner.hasNextLine()){
+				String user = scanner.next();
+				if(input.equals(user)){
+					scanner.close();
+					return true;
+				}
+				scanner.nextLine();
+			}
+			scanner.close();
+			return false;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+		
+	/**
+	* Check if password matches username
+	 * @param user Username of the user loggging in.
+	 * @return If the password entered is the correct password to the given username.
+	*/
+	private boolean checkPass(String user, String pass){
+		File file = new File("userPass.txt");
+		Scanner scanner;
+		try {
+			scanner = new Scanner(file);
+			while(scanner.hasNextLine()){
+				String username = scanner.next();
+				if(username.equals(user)){
+					String password = scanner.next();
+					if(password.equals(pass)){
+						scanner.close();
+						return true;
+					}
+				}else{
+					scanner.nextLine();
+				}
+			}
+			scanner.close();
+			return false;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 }

@@ -2,11 +2,13 @@ package mapandhelpers;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
+import javafx.animation.AnimationTimer;
 import javafx.animation.PathTransition;
 import javafx.animation.PathTransition.OrientationType;
 import javafx.application.Application;
@@ -41,6 +43,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import Objects.ActorObject;
 import Objects.CharacterObject;
+import Objects.ProjectileObject;
 
 public class Map extends Application{
 	
@@ -233,6 +236,10 @@ public class Map extends Application{
 		Background background = new Background(new BackgroundFill[] {a});
 		pane.setBackground(background);
 		
+		ArrayList<Rectangle> bullets = new ArrayList<Rectangle>();
+		ArrayList<ProjectileObject> bulletRef = new ArrayList<ProjectileObject>();
+		ArrayList<Integer> bulletLife = new ArrayList<Integer>();
+		
 //		ActorObject userChar = new CharacterObject();
 		
 		Circle userPlace = new Circle(50);
@@ -306,9 +313,9 @@ public class Map extends Application{
 				break;
 			case W:
 				Rectangle rect1 = new Rectangle();
-				ActorObject rectRef = new ActorObject();
-				rectRef.setPosX(userChar.getPosX());
-				rectRef.setPosY(userChar.getPosY());
+				ProjectileObject rectRef = new ProjectileObject(0, userChar);
+				rectRef.setPosX(rectRef.getChar().getPosX());
+				rectRef.setPosY(rectRef.getChar().getPosY());
 				rect1.setWidth(5);
 				rect1.setHeight(5);
 				rect1.setFill(Color.YELLOW);
@@ -317,23 +324,61 @@ public class Map extends Application{
 				rect1.setTranslateY(rectRef.getPosY());
 				pane.getChildren().add(rect1);
 				rect1.requestFocus();
-				Timer t = new Timer();
-				t.schedule(new TimerTask() {
-					int counter = 0;
-				    @Override
-				    public void run() {
-				    	if (counter < 25){
-				    		rectRef.setPosY(rectRef.getPosY()-10);
-				    		rect1.setTranslateY(rectRef.getPosY());
-				    		counter++;
-				    	}
-				    	else{
-//							pane.getChildren().remove(rect1);
-				    		rect1.setVisible(false);
-				    		t.cancel();
-				    	}
-				    }
-				}, 0, 100);
+				bullets.add(rect1);
+				bulletRef.add(rectRef);
+				bulletLife.add(0);
+				break;
+			case S:
+				Rectangle rect2 = new Rectangle();
+				ProjectileObject rectRef2 = new ProjectileObject(1, userChar);
+				rectRef2.setPosX(rectRef2.getChar().getPosX());
+				rectRef2.setPosY(rectRef2.getChar().getPosY());
+				rect2.setWidth(5);
+				rect2.setHeight(5);
+				rect2.setFill(Color.YELLOW);
+				rect2.setStroke(Color.BLACK);
+				rect2.setTranslateX(rectRef2.getPosX());
+				rect2.setTranslateY(rectRef2.getPosY());
+				pane.getChildren().add(rect2);
+				rect2.requestFocus();
+				bullets.add(rect2);
+				bulletRef.add(rectRef2);
+				bulletLife.add(0);
+				break;
+			case A:
+				Rectangle rect3 = new Rectangle();
+				ProjectileObject rectRef3 = new ProjectileObject(2, userChar);
+				rectRef3.setPosX(rectRef3.getChar().getPosX());
+				rectRef3.setPosY(rectRef3.getChar().getPosY());
+				rect3.setWidth(5);
+				rect3.setHeight(5);
+				rect3.setFill(Color.YELLOW);
+				rect3.setStroke(Color.BLACK);
+				rect3.setTranslateX(rectRef3.getPosX());
+				rect3.setTranslateY(rectRef3.getPosY());
+				pane.getChildren().add(rect3);
+				rect3.requestFocus();
+				bullets.add(rect3);
+				bulletRef.add(rectRef3);
+				bulletLife.add(0);
+				break;
+			case D:
+				Rectangle rect4 = new Rectangle();
+				ProjectileObject rectRef4 = new ProjectileObject(3, userChar);
+				rectRef4.setPosX(rectRef4.getChar().getPosX());
+				rectRef4.setPosY(rectRef4.getChar().getPosY());
+				rect4.setWidth(5);
+				rect4.setHeight(5);
+				rect4.setFill(Color.YELLOW);
+				rect4.setStroke(Color.BLACK);
+				rect4.setTranslateX(rectRef4.getPosX());
+				rect4.setTranslateY(rectRef4.getPosY());
+				pane.getChildren().add(rect4);
+				rect4.requestFocus();
+				bullets.add(rect4);
+				bulletRef.add(rectRef4);
+				bulletLife.add(0);
+				break;
 			default:
 				break;
 			}	
@@ -341,6 +386,52 @@ public class Map extends Application{
 		
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		
+		new AnimationTimer(){
+			private long lastUpdate = 0;
+			@Override
+			public void handle(long now){
+				if (now - lastUpdate >= 1000_000_000) {
+                    lastUpdate = now ;
+                    for(int i= 0; i < bullets.size(); i++){
+                    	if(bulletRef.get(i).getOrient() == 0){
+                    		bulletRef.get(i).setPosY(bulletRef.get(i).getPosY()-100);
+                    		bullets.get(i).setTranslateY(bulletRef.get(i).getPosY());
+                    		bulletLife.set(i, bulletLife.get(i) + 1); //increment life by 1
+                    		System.out.println("Bullet Life is " + bulletLife.get(i));
+                    	}
+                    	else if(bulletRef.get(i).getOrient() == 1){
+                    		bulletRef.get(i).setPosY(bulletRef.get(i).getPosY()+100);
+                    		bullets.get(i).setTranslateY(bulletRef.get(i).getPosY());
+                    		bulletLife.set(i, bulletLife.get(i) + 1); //increment life by 1
+                    		System.out.println("Bullet Life is " + bulletLife.get(i));
+                    	}
+                    	else if(bulletRef.get(i).getOrient() == 2){
+                    		bulletRef.get(i).setPosX(bulletRef.get(i).getPosX()-100);
+                    		bullets.get(i).setTranslateX(bulletRef.get(i).getPosX());
+                    		bulletLife.set(i, bulletLife.get(i) + 1); //increment life by 1
+                    		System.out.println("Bullet Life is " + bulletLife.get(i));
+                    	}
+                    	else if(bulletRef.get(i).getOrient() == 3){
+                    		bulletRef.get(i).setPosX(bulletRef.get(i).getPosX()+100);
+                    		bullets.get(i).setTranslateX(bulletRef.get(i).getPosX());
+                    		bulletLife.set(i, bulletLife.get(i) + 1); //increment life by 1
+                    		System.out.println("Bullet Life is " + bulletLife.get(i));
+                    	}
+					}
+                    
+                    for(int i = bullets.size() - 1; i >= 0; i--){
+                    	if(bulletLife.get(i) > 4){
+                    		System.out.print("remove bullet at index " + i + "\n");
+                    		pane.getChildren().remove(bullets.get(i));
+                    		bullets.remove(i);
+                    		bulletRef.remove(i);
+                    		bulletLife.remove(i);
+                    	}
+                    }
+                }
+			}
+		}.start();
 		
 	}
 	

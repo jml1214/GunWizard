@@ -3,6 +3,7 @@ package mapandhelpers;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 import Objects.ActorObject;
@@ -186,6 +187,7 @@ public class Map extends Application{
 	}
 	
 	public void gameScreen(Stage primaryStage, CharacterObject userChar){
+		Random rand = new Random();
 		Pane pane = new StackPane();
 		BackgroundFill a = new BackgroundFill(Color.WHITE, null, null);
 		Background background = new Background(new BackgroundFill[] {a});
@@ -408,6 +410,23 @@ public class Map extends Application{
 			public void handle(long now){
 				if (now - lastUpdate >= 1000_000_000) {
                     lastUpdate = now ;
+                    int n = rand.nextInt(4);
+                    if(n == 0){
+                		evilRef.setPosY(evilRef.getPosY()-100);
+                		evil.setTranslateY(evilRef.getPosY());
+                	}
+                	else if(n == 1){
+                		evilRef.setPosY(evilRef.getPosY()+100);
+                		evil.setTranslateY(evilRef.getPosY());
+                	}
+                	else if(n == 2){
+                		evilRef.setPosX(evilRef.getPosX()-100);
+                		evil.setTranslateX(evilRef.getPosX());
+                	}
+                	else if(n == 3){
+                		evilRef.setPosX(evilRef.getPosX()+100);
+                		evil.setTranslateX(evilRef.getPosX());
+                	}
                     for(int i = 0; i < bullets.size(); i++){
                     	if(bulletRef.get(i).getPosX() == evilRef.getPosX()
                     	&& bulletRef.get(i).getPosY() == evilRef.getPosY()){

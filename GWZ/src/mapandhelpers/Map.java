@@ -11,6 +11,7 @@ import Objects.CharacterObject;
 import Objects.ProjectileObject;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -29,6 +30,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.scene.input.MouseEvent;
 
 public class Map extends Application{
 	
@@ -249,7 +251,17 @@ public class Map extends Application{
 			userChar.setPosX(0);
 		});
 		
+		
+		
 		Scene scene = new Scene(pane, viewSizeX, viewSizeY);
+		
+		
+		scene.setOnMousePressed(new EventHandler<MouseEvent>(){
+			@Override public void handle(MouseEvent event) {
+		        
+		      }
+		});
+
 		scene.setOnKeyPressed(e -> {
 			switch (e.getCode()){
 			case DOWN:

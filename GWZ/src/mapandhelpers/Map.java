@@ -4,23 +4,17 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
+import Objects.ActorObject;
+import Objects.CharacterObject;
+import Objects.ProjectileObject;
 import javafx.animation.AnimationTimer;
-import javafx.animation.PathTransition;
-import javafx.animation.PathTransition.OrientationType;
 import javafx.application.Application;
-import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
@@ -28,22 +22,12 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Arc;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-import Objects.ActorObject;
-import Objects.CharacterObject;
-import Objects.ProjectileObject;
 
 public class Map extends Application{
 	
@@ -114,39 +98,6 @@ public class Map extends Application{
 		
 	}
 	
-//	public void mainMenu(Stage primaryStage){
-//		Pane pane = new StackPane();
-//		
-//		//Background
-//		BackgroundFill a = new BackgroundFill(Color.GREY, null, null);
-//		Background background = new Background(new BackgroundFill[] {a});
-//		pane.setBackground(background);
-//		
-//		//Setting view sizes and instantiating the scene object for title screen
-//	    Scene scene = new Scene(pane, viewSizeX, viewSizeY);
-//	    primaryStage.setScene(scene);
-//		primaryStage.show();
-//		
-//		Button b = new Button();
-//		b.setText("Enter");
-//		b.setTranslateX(0);
-//		b.setTranslateY(200);
-//		b.setStyle("-fx-font-size:40; -fx-background-color:red;");
-////		b.setMaxWidth(200);
-////		b.setMaxHeight(200);
-//		pane.getChildren().add(b);
-//		
-//		String musicFile = "Swords_Collide-Sound_Explorer-2015600826.mp3";
-//
-//		Media sound = new Media(new File(musicFile).toURI().toString());
-//		final MediaPlayer mediaPlayer = new MediaPlayer(sound);
-//		// Button press
-//		b.setOnAction((event) -> {
-//			mediaPlayer.play();
-//		    loginScreen(primaryStage);
-//		});
-//	}
-	
 	public void loginScreen(Stage primaryStage, int state){
 		Pane pane = new StackPane();
 		
@@ -189,7 +140,7 @@ public class Map extends Application{
 	    pane.getChildren().add(passWord);
 	    
 	    Button login = new Button();
-		login.setText("null");
+		login.setText("Login");
 		login.setTranslateX(-175);
 		login.setTranslateY(275);
 		login.setStyle("-fx-font-size:40; -fx-background-color:red;");
@@ -199,13 +150,13 @@ public class Map extends Application{
 		pane.getChildren().add(login);
 		
 		Button exit = new Button();
-		exit.setText("null");
+		exit.setText("Exit");
 		exit.setTranslateX(295);
 		exit.setTranslateY(275);
 		exit.setStyle("-fx-font-size:40; -fx-background-color:red;");
 		exit.setMaxWidth(200);
 		exit.setMaxHeight(50);
-		exit.setVisible(false);
+		exit.setVisible(true);
 		pane.getChildren().add(exit);
 		
 
@@ -223,6 +174,10 @@ public class Map extends Application{
 		    	loginScreen(primaryStage, 1);
 		    }
 		    
+		});
+		
+		exit.setOnAction((event) -> {
+		    titleScreen(primaryStage);
 		});
 
 		Scene scene = new Scene(pane, viewSizeX, viewSizeY);
@@ -245,9 +200,23 @@ public class Map extends Application{
 		Circle userPlace = new Circle(50);
 		userPlace.setTranslateX(0);
 		userPlace.setTranslateY(0);
-		userPlace.setFill(Color.RED);
-		
+		userPlace.setFill(Color.BLUE);
+		userPlace.setStroke(Color.BLACK);
 		pane.getChildren().add(userPlace);
+		
+		Rectangle evil = new Rectangle(50,50);
+		CharacterObject evilRef = new CharacterObject();
+		evilRef.setPosX(0);
+		evilRef.setPosY(-300);
+		evilRef.setHealth(50);
+		evil.setTranslateX(evilRef.getPosX());
+		evil.setTranslateY(evilRef.getPosY());
+		evil.setFill(Color.PURPLE);
+		evil.setStroke(Color.BLACK);
+		pane.getChildren().add(evil);
+		
+		
+		
 		
 		File akFile = new File("AK47.png");
 		ActorObject ak47 = new ActorObject();
@@ -427,6 +396,26 @@ public class Map extends Application{
                     		bullets.remove(i);
                     		bulletRef.remove(i);
                     		bulletLife.remove(i);
+                    	}
+                    }
+                }
+			}
+		}.start();
+		
+		new AnimationTimer(){
+			private long lastUpdate = 0;
+			@Override
+			public void handle(long now){
+				if (now - lastUpdate >= 1000_000_000) {
+                    lastUpdate = now ;
+                    for(int i = 0; i < bullets.size(); i++){
+                    	if(bulletRef.get(i).getPosX() == evilRef.getPosX()
+                    	&& bulletRef.get(i).getPosY() == evilRef.getPosY()){
+                    		evilRef.reduceHealth(10);
+                    	}
+                    	if(evilRef.getHealth() == 0){
+                    		pane.getChildren().remove(evil);
+                    		break;
                     	}
                     }
                 }

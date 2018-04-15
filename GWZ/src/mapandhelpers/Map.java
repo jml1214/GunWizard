@@ -197,6 +197,12 @@ public class Map extends Application{
 		ArrayList<ProjectileObject> bulletRef = new ArrayList<ProjectileObject>();
 		ArrayList<Integer> bulletLife = new ArrayList<Integer>();
 		
+		//File and ImageView for the skill screen
+		File ssFile = new File("skills_screen.png");
+		ImageView ssIv = new ImageView(new Image(ssFile.toURI().toString(),viewSizeX,viewSizeY,false,false));
+		ssIv.setTranslateX(0);
+		ssIv.setTranslateY(0);
+		
 //		ActorObject userChar = new CharacterObject();
 		
 		Circle userPlace = new Circle(50);
@@ -350,6 +356,14 @@ public class Map extends Application{
 				bulletRef.add(rectRef4);
 				bulletLife.add(0);
 				break;
+			case P:
+				if(pane.getChildren().contains(ssIv)){
+					pane.getChildren().remove(ssIv);
+				}
+				else{
+					pane.getChildren().add(ssIv);
+				}
+				break;
 			default:
 				break;
 			}	
@@ -441,6 +455,15 @@ public class Map extends Application{
 			}
 		}.start();
 		
+	}
+	
+	public void skillScreen(Stage primaryStage, Pane pane){
+		File file = new File("skills_screen.png");
+		ImageView iv = new ImageView(new Image(file.toURI().toString(),viewSizeX,viewSizeY,false,false));
+		iv.setTranslateX(0);
+		iv.setTranslateY(0);
+		pane.getChildren().add(iv);
+		System.out.println("Skill Screen open");
 	}
 	
 	/**

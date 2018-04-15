@@ -14,7 +14,7 @@ public class Abilities {
 	public Abilities(){
 		abilityList = new ArrayList<ArrayList<Boolean>>(5);
 		for(int i = 0; i < 5; i++){
-			abilityList.add(i, new ArrayList<Boolean>(10));
+			abilityList.add(i, new ArrayList<Boolean>(3));
 			for(int k = 0; k < 10; k++){
 				abilityList.get(i).add(k, false);
 			}

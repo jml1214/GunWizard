@@ -133,4 +133,12 @@ public class CharacterObject extends ActorObject {
 			return true;
 		}
 	}
+	
+	public Abilities getAbilities(){
+		return charAbilities;
+	}
+	
+	public void setAbilities(Abilities newAbilities){
+		charAbilities = newAbilities;
+	}
 }

@@ -376,38 +376,33 @@ public class Map extends Application{
 			private long lastUpdate = 0;
 			@Override
 			public void handle(long now){
-				if (now - lastUpdate >= 1000_000_000) {
+				if (now - lastUpdate >= 10_000_000) {
                     lastUpdate = now ;
                     for(int i= 0; i < bullets.size(); i++){
                     	if(bulletRef.get(i).getOrient() == 0){
-                    		bulletRef.get(i).setPosY(bulletRef.get(i).getPosY()-100);
+                    		bulletRef.get(i).setPosY(bulletRef.get(i).getPosY()-5);
                     		bullets.get(i).setTranslateY(bulletRef.get(i).getPosY());
                     		bulletLife.set(i, bulletLife.get(i) + 1); //increment life by 1
-                    		System.out.println("Bullet Life is " + bulletLife.get(i));
                     	}
                     	else if(bulletRef.get(i).getOrient() == 1){
-                    		bulletRef.get(i).setPosY(bulletRef.get(i).getPosY()+100);
+                    		bulletRef.get(i).setPosY(bulletRef.get(i).getPosY()+5);
                     		bullets.get(i).setTranslateY(bulletRef.get(i).getPosY());
                     		bulletLife.set(i, bulletLife.get(i) + 1); //increment life by 1
-                    		System.out.println("Bullet Life is " + bulletLife.get(i));
                     	}
                     	else if(bulletRef.get(i).getOrient() == 2){
-                    		bulletRef.get(i).setPosX(bulletRef.get(i).getPosX()-100);
+                    		bulletRef.get(i).setPosX(bulletRef.get(i).getPosX()-5);
                     		bullets.get(i).setTranslateX(bulletRef.get(i).getPosX());
                     		bulletLife.set(i, bulletLife.get(i) + 1); //increment life by 1
-                    		System.out.println("Bullet Life is " + bulletLife.get(i));
                     	}
                     	else if(bulletRef.get(i).getOrient() == 3){
-                    		bulletRef.get(i).setPosX(bulletRef.get(i).getPosX()+100);
+                    		bulletRef.get(i).setPosX(bulletRef.get(i).getPosX()+5);
                     		bullets.get(i).setTranslateX(bulletRef.get(i).getPosX());
-                    		bulletLife.set(i, bulletLife.get(i) + 1); //increment life by 1
-                    		System.out.println("Bullet Life is " + bulletLife.get(i));
+                    		bulletLife.set(i, bulletLife.get(i) + 1); //increment life by 1	
                     	}
 					}
                     
                     for(int i = bullets.size() - 1; i >= 0; i--){
-                    	if(bulletLife.get(i) > 4){
-                    		System.out.print("remove bullet at index " + i + "\n");
+                    	if(bulletLife.get(i) > 200){
                     		pane.getChildren().remove(bullets.get(i));
                     		bullets.remove(i);
                     		bulletRef.remove(i);
@@ -420,31 +415,43 @@ public class Map extends Application{
 		
 		new AnimationTimer(){
 			private long lastUpdate = 0;
+			private long lastHit = 0;
 			@Override
 			public void handle(long now){
-				if (now - lastUpdate >= 1000_000_000) {
+				if (now - lastUpdate >= 100_000_000) {
                     lastUpdate = now ;
+                    evil.setFill(Color.PURPLE);
                     int n = rand.nextInt(4);
                     if(n == 0){
-                		evilRef.setPosY(evilRef.getPosY()-100);
+                		evilRef.setPosY(evilRef.getPosY()-10);
                 		evil.setTranslateY(evilRef.getPosY());
                 	}
                 	else if(n == 1){
-                		evilRef.setPosY(evilRef.getPosY()+100);
+                		evilRef.setPosY(evilRef.getPosY()+10);
                 		evil.setTranslateY(evilRef.getPosY());
                 	}
                 	else if(n == 2){
-                		evilRef.setPosX(evilRef.getPosX()-100);
+                		evilRef.setPosX(evilRef.getPosX()-10);
                 		evil.setTranslateX(evilRef.getPosX());
                 	}
                 	else if(n == 3){
-                		evilRef.setPosX(evilRef.getPosX()+100);
+                		evilRef.setPosX(evilRef.getPosX()+10);
                 		evil.setTranslateX(evilRef.getPosX());
                 	}
                     for(int i = 0; i < bullets.size(); i++){
-                    	if(bulletRef.get(i).getPosX() == evilRef.getPosX()
-                    	&& bulletRef.get(i).getPosY() == evilRef.getPosY()){
-                    		evilRef.reduceHealth(10);
+                    	double leftBound = evilRef.getPosX() - (evilRef.getSizeX()/2);
+                    	double rightBound = evilRef.getPosX() + (evilRef.getSizeY()/2);
+                    	double topBound = evilRef.getPosY() - (evilRef.getSizeY()/2);
+                    	double bottomBound = evilRef.getPosY() + (evilRef.getSizeY()/2);
+                    	ProjectileObject bullet_ = bulletRef.get(i);
+                    	if(bullet_.getPosX() >= leftBound && bullet_.getPosX() <= rightBound){ //falls in between right and left bounds
+                    		if(bullet_.getPosY() >= topBound && bullet_.getPosY() <= bottomBound){
+                    			if(now - lastHit >= 300_000_000){ //invulnerable period
+                    			lastHit = now;
+                    			evil.setFill(Color.AQUA);
+                    			evilRef.reduceHealth(10);
+                    			}
+                    		}
                     	}
                     	if(evilRef.getHealth() == 0){
                     		pane.getChildren().remove(evil);

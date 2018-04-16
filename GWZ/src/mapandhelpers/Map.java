@@ -166,7 +166,7 @@ public class Map extends Application{
 		login.setOnAction((event) -> {
 			if(checkUser(userName.getText())){
 				if(checkPass(userName.getText(), passWord.getText())){
-					gameScreen(primaryStage, new CharacterObject(), 4);
+					gameScreen(primaryStage, new CharacterObject(), 0);
 				}
 				else{
 					loginScreen(primaryStage, 2);
@@ -287,24 +287,43 @@ public class Map extends Application{
 
 
 		//Start of this push
-		Rectangle healthBar = new Rectangle(evilRef.getHealth(), 15);
-		ActorObject healthBarRef = new ActorObject();
-		healthBar.setFill(Color.RED);
-		healthBar.setStroke(Color.BLACK);
-		healthBarRef.setPosX(250);
-		healthBarRef.setPosY(350);
-		healthBar.setTranslateX(healthBarRef.getPosX());
-		healthBar.setTranslateY(healthBarRef.getPosY());
-
-
-		Rectangle healthBack = new Rectangle(evilRef.getHealth(), 15);
-		ActorObject healthBackRef = new ActorObject();
-		healthBack.setFill(Color.GREY);
-		healthBack.setStroke(Color.BLACK);
-		healthBackRef.setPosX(250);
-		healthBackRef.setPosY(350);
-		healthBack.setTranslateX(healthBackRef.getPosX());
-		healthBack.setTranslateY(healthBackRef.getPosY());
+		ArrayList<Rectangle> healthBars = new ArrayList<Rectangle>();
+		ArrayList<ActorObject> healthBarRefs = new ArrayList<ActorObject>();
+		for(int i = 0; i < 2; i++){
+			healthBars.add(new Rectangle(enemiesRef.get(i).getHealth(), 15));
+			healthBarRefs.add(new ActorObject());
+			healthBars.get(i).setFill(Color.RED);
+			healthBars.get(i).setStroke(Color.BLACK);
+			if(i == 0){
+				healthBarRefs.get(i).setPosX(250);
+				healthBarRefs.get(i).setPosY(350);
+			}
+			else{
+				healthBarRefs.get(i).setPosX(350);
+				healthBarRefs.get(i).setPosY(350);
+			}
+			healthBars.get(i).setTranslateX(healthBarRefs.get(i).getPosX());
+			healthBars.get(i).setTranslateY(healthBarRefs.get(i).getPosY());
+		}
+		
+		ArrayList<Rectangle> healthBacks = new ArrayList<Rectangle>();
+		ArrayList<ActorObject> healthBackRefs = new ArrayList<ActorObject>();
+		for(int i = 0; i < 2; i++){
+			healthBacks.add(new Rectangle(enemiesRef.get(i).getHealth(), 15));
+			healthBackRefs.add(new ActorObject());
+			healthBacks.get(i).setFill(Color.GREY);
+			healthBacks.get(i).setStroke(Color.BLACK);
+			if(i == 0){
+				healthBackRefs.get(i).setPosX(250);
+				healthBackRefs.get(i).setPosY(350);
+			}
+			else{
+				healthBackRefs.get(i).setPosX(350);
+				healthBackRefs.get(i).setPosY(350);
+			}
+			healthBacks.get(i).setTranslateX(healthBackRefs.get(i).getPosX());
+			healthBacks.get(i).setTranslateY(healthBackRefs.get(i).getPosY());
+		}
 
 		Rectangle healthBarP = new Rectangle(userChar.getHealth(), 15);
 		ActorObject healthBarRefP = new ActorObject();
@@ -314,7 +333,8 @@ public class Map extends Application{
 		healthBarRefP.setPosY(350);
 		healthBarP.setTranslateX(healthBarRefP.getPosX());
 		healthBarP.setTranslateY(healthBarRefP.getPosY());
-
+		healthBars.add(healthBarP);
+		healthBarRefs.add(healthBarRefP);
 
 		Rectangle healthBackP = new Rectangle(userChar.getHealth(), 15);
 		ActorObject healthBackRefP = new ActorObject();
@@ -324,12 +344,16 @@ public class Map extends Application{
 		healthBackRefP.setPosY(350);
 		healthBackP.setTranslateX(healthBackRefP.getPosX());
 		healthBackP.setTranslateY(healthBackRefP.getPosY());
+		healthBacks.add(healthBackP);
+		healthBackRefs.add(healthBackRefP);
 
-		pane.getChildren().add(healthBack);
-		pane.getChildren().add(healthBar);
-
-		pane.getChildren().add(healthBackP);
-		pane.getChildren().add(healthBarP);
+		for(Rectangle r : healthBacks){
+			pane.getChildren().add(r);
+		}
+		
+		for(Rectangle r : healthBars){
+			pane.getChildren().add(r);
+		}
 		//End this push
 
 		//Buttons for the Skill Screen
@@ -878,10 +902,12 @@ public class Map extends Application{
 							if(bullet_.getPosY() >= topBound && bullet_.getPosY() <= bottomBound){
 								if(now -lastDamageTaken >= 1000_000_000){
 									lastDamageTaken = now;
-									userChar.reduceHealth(10);
-									healthBarRefP.setPosX(healthBarRefP.getPosX()-5);
-									healthBarP.setTranslateX(healthBarRefP.getPosX());
-									healthBarP.setWidth(userChar.getHealth());
+									if(userChar.getHealth() > 0){
+										healthBarRefs.get(2).setPosX(healthBarRefs.get(2).getPosX()-5);
+										healthBars.get(2).setTranslateX(healthBarRefs.get(2).getPosX());
+										userChar.reduceHealth(10);
+										healthBars.get(2).setWidth(userChar.getHealth());
+									}
 									System.out.println("Ouch!");
 									if(userChar.getHealth() <= 0){
 										System.out.println("END GAME!");
@@ -917,6 +943,7 @@ public class Map extends Application{
 						Rectangle enemy = enemies.get(j);
 						CharacterObject enemyRef = enemiesRef.get(j);
 						enemy.setFill(Color.PURPLE);
+						enemy.setStroke(Color.BLACK);
 						int n = rand.nextInt(4);
 						if(n == 0){
 							enemyRef.setPosY(enemyRef.getPosY()-10);
@@ -947,9 +974,9 @@ public class Map extends Application{
 										lastHit = now;
 										enemy.setFill(Color.AQUA);
 										enemyRef.reduceHealth(10);
-										healthBarRef.setPosX(healthBarRef.getPosX()-5);
-										healthBar.setTranslateX(healthBarRef.getPosX());
-										healthBar.setWidth(enemyRef.getHealth());
+										healthBarRefs.get(j).setPosX(healthBarRefs.get(j).getPosX()-5);
+										healthBars.get(j).setTranslateX(healthBarRefs.get(j).getPosX());
+										healthBars.get(j).setWidth(enemyRef.getHealth());
 									}
 								}
 							}
@@ -962,6 +989,10 @@ public class Map extends Application{
 							pane.getChildren().remove(enemies.get(i));
 							enemies.remove(i);
 							enemiesRef.remove(i);
+							healthBarRefs.remove(i);
+							healthBars.remove(i);
+							healthBacks.remove(i);
+							healthBackRefs.remove(i);
 							break;
 						}
 					}

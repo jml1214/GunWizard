@@ -238,6 +238,15 @@ public class Map extends Application{
 	    pane.getChildren().add(akIv);
 	    ak47.setPosX(userChar.getPosX()+50);
 	    akIv.setTranslateX(ak47.getPosX()+50);
+	    
+	    File hatFile = new File("magic_wizard_hat.png");
+		ActorObject hatObject = new ActorObject();
+	    ImageView hatIv = new ImageView(new Image(hatFile.toURI().toString(),100,100,false,false));
+	    pane.getChildren().add(hatIv);
+	    hatObject.setPosX(userChar.getPosX());
+	    hatObject.setPosY(userChar.getPosY()-60);
+	    hatIv.setTranslateX(hatObject.getPosX());
+	    hatIv.setTranslateY(hatObject.getPosY());
 	
 		Scene scene = new Scene(pane, viewSizeX, viewSizeY);
 		
@@ -271,6 +280,13 @@ public class Map extends Application{
 				akIv.requestFocus();
 				ak47.setPosY(userChar.getPosY()+50);
 				akIv.setTranslateY(ak47.getPosY());
+				
+				hatIv.requestFocus();
+				hatObject.setPosX(userChar.getPosX());
+				hatObject.setPosY(userChar.getPosY()-60);
+				hatIv.setTranslateX(hatObject.getPosX());
+				hatIv.setTranslateY(hatObject.getPosY());
+				
 				break;
 			case W:
 				userPlace.requestFocus();
@@ -280,6 +296,12 @@ public class Map extends Application{
 				akIv.requestFocus();
 				ak47.setPosY(userChar.getPosY()-50);
 				akIv.setTranslateY(ak47.getPosY());
+				
+				hatIv.requestFocus();
+				hatObject.setPosX(userChar.getPosX());
+				hatObject.setPosY(userChar.getPosY()-60);
+				hatIv.setTranslateX(hatObject.getPosX());
+				hatIv.setTranslateY(hatObject.getPosY());
 				break;
 			case D:
 				userPlace.requestFocus();
@@ -289,6 +311,12 @@ public class Map extends Application{
 				akIv.requestFocus();
 				ak47.setPosX(userChar.getPosX()+50);
 				akIv.setTranslateX(ak47.getPosX());
+				
+				hatIv.requestFocus();
+				hatObject.setPosX(userChar.getPosX());
+				hatObject.setPosY(userChar.getPosY()-60);
+				hatIv.setTranslateX(hatObject.getPosX());
+				hatIv.setTranslateY(hatObject.getPosY());
 				break;
 			case A:
 				userPlace.requestFocus();
@@ -298,6 +326,12 @@ public class Map extends Application{
 				akIv.requestFocus();
 				ak47.setPosX(userChar.getPosX()-50);
 				akIv.setTranslateX(ak47.getPosX());
+				
+				hatIv.requestFocus();
+				hatObject.setPosX(userChar.getPosX());
+				hatObject.setPosY(userChar.getPosY()-60);
+				hatIv.setTranslateX(hatObject.getPosX());
+				hatIv.setTranslateY(hatObject.getPosY());
 				break;
 			case P:
 				if(pane.getChildren().contains(ssIv)){

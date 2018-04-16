@@ -229,8 +229,51 @@ public class Map extends Application{
 		evil.setStroke(Color.BLACK);
 		pane.getChildren().add(evil);
 		
+		//Start of this push
+		Rectangle healthBar = new Rectangle(100, 15);
+		ActorObject healthBarRef = new ActorObject();
+		healthBar.setFill(Color.RED);
+		healthBar.setStroke(Color.BLACK);
+		healthBarRef.setPosX(250);
+		healthBarRef.setPosY(350);
+		healthBar.setTranslateX(healthBarRef.getPosX());
+		healthBar.setTranslateY(healthBarRef.getPosY());
 		
 		
+		Rectangle healthBack = new Rectangle(100, 15);
+		ActorObject healthBackRef = new ActorObject();
+		healthBack.setFill(Color.GREY);
+		healthBack.setStroke(Color.BLACK);
+		healthBackRef.setPosX(250);
+		healthBackRef.setPosY(350);
+		healthBack.setTranslateX(healthBackRef.getPosX());
+		healthBack.setTranslateY(healthBackRef.getPosY());
+		
+		Rectangle healthBarP = new Rectangle(100, 15);
+		ActorObject healthBarRefP = new ActorObject();
+		healthBarP.setFill(Color.RED);
+		healthBarP.setStroke(Color.BLACK);
+		healthBarRefP.setPosX(-250);
+		healthBarRefP.setPosY(350);
+		healthBarP.setTranslateX(healthBarRefP.getPosX());
+		healthBarP.setTranslateY(healthBarRefP.getPosY());
+		
+		
+		Rectangle healthBackP = new Rectangle(100, 15);
+		ActorObject healthBackRefP = new ActorObject();
+		healthBackP.setFill(Color.GREY);
+		healthBackP.setStroke(Color.BLACK);
+		healthBackRefP.setPosX(-250);
+		healthBackRefP.setPosY(350);
+		healthBackP.setTranslateX(healthBackRefP.getPosX());
+		healthBackP.setTranslateY(healthBackRefP.getPosY());
+		
+		pane.getChildren().add(healthBack);
+		pane.getChildren().add(healthBar);
+		
+		pane.getChildren().add(healthBackP);
+		pane.getChildren().add(healthBarP);
+		//End this push
 		
 		File akFile = new File("AK47.png");
 		ActorObject ak47 = new ActorObject();
@@ -247,6 +290,59 @@ public class Map extends Application{
 	    hatObject.setPosY(userChar.getPosY()-60);
 	    hatIv.setTranslateX(hatObject.getPosX());
 	    hatIv.setTranslateY(hatObject.getPosY());
+	    
+	    //Start of this push
+	    //resume, save, options, quit
+	    //in-game menu buttons
+	    Button save = new Button();
+	    Button options = new Button();
+		Button quit = new Button();
+	    Button resume = new Button();
+	    
+	    //save
+	    save.setTranslateX(0);
+		save.setTranslateY(-65);
+	    save.setStyle("-fx-font-size:40; -fx-background-color:none;");
+		save.setMaxWidth(315);
+		save.setMaxHeight(115);
+		save.setVisible(true);
+		save.setOnAction((event) -> {
+			pane.getChildren().remove(pView);
+			pane.getChildren().removeAll(resume, save, options, quit);
+	    });
+	    //options
+	    options.setTranslateX(0);
+		options.setTranslateY(85);
+	    options.setStyle("-fx-font-size:40; -fx-background-color:none;");
+		options.setMaxWidth(315);
+		options.setMaxHeight(115);
+		options.setVisible(true);
+		options.setOnAction((event) -> {
+			pane.getChildren().remove(pView);
+			pane.getChildren().removeAll(resume, save, options, quit);
+	    });
+	    //quit
+	    quit.setTranslateX(0);
+		quit.setTranslateY(255);
+	    quit.setStyle("-fx-font-size:40; -fx-background-color:none;");
+		quit.setMaxWidth(315);
+		quit.setMaxHeight(115);
+		quit.setVisible(true);
+		quit.setOnAction((event) -> {
+	    	titleScreen(primaryStage);
+	    });
+		//resume
+	    resume.setTranslateX(0);
+		resume.setTranslateY(-210);
+	    resume.setStyle("-fx-font-size:40; -fx-background-color:none;");
+		resume.setMaxWidth(310);
+		resume.setMaxHeight(110);
+		resume.setVisible(true);
+	    resume.setOnAction((event) -> {
+	    	pane.getChildren().remove(pView);
+			pane.getChildren().removeAll(resume, save, options, quit);
+	    });
+	    //end of this push
 	
 		Scene scene = new Scene(pane, viewSizeX, viewSizeY);
 		
@@ -341,14 +437,18 @@ public class Map extends Application{
 					pane.getChildren().add(ssIv);
 				}
 				break;
+				//Start of this push
 			case ESCAPE:
 				if(pane.getChildren().contains(pView)){
 					pane.getChildren().remove(pView);
+					pane.getChildren().removeAll(resume, save, options, quit);
 				}
 				else{
 					pane.getChildren().add(pView);
+					pane.getChildren().addAll(resume, save, options, quit);
 				}
 				break;
+				//end of this push
 			default:
 				break;
 			}	
@@ -447,6 +547,9 @@ public class Map extends Application{
                     			lastHit = now;
                     			evil.setFill(Color.AQUA);
                     			evilRef.reduceHealth(10);
+                    			healthBarRef.setPosX(healthBarRef.getPosX()-10);
+                    			healthBar.setTranslateX(healthBarRef.getPosX());
+                    			healthBar.setWidth(evilRef.getHealth()*2);
                     			}
                     		}
                     	}

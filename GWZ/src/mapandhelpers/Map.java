@@ -330,15 +330,34 @@ public class Map extends Application{
 				if (now - lastUpdate >= 10_000_000) {
                     lastUpdate = now ;
                     for(int i= 0; i < bullets.size(); i++){
-                    	bulletRef.get(i).setPosY(bulletRef.get(i).getPosY()+(((bulletRef.get(i).getDestY() - bulletRef.get(i).getOrigY())/200)*5));
-                    	bulletRef.get(i).setPosX(bulletRef.get(i).getPosX()+(((bulletRef.get(i).getDestX() - bulletRef.get(i).getOrigX())/200)*5));                   	
+                    	
+                    	double newY = bulletRef.get(i).getPosY()+(((bulletRef.get(i).getDestY() - bulletRef.get(i).getOrigY())/200)*5);
+                    	//ensure projectile moves to end of screen
+                    	if((newY >= 400)){
+                    		bulletRef.get(i).setPosY(400);
+                    	} else if(newY <= -400){
+                    		bulletRef.get(i).setPosY(-400);
+                    	} else {
+                    		bulletRef.get(i).setPosY(bulletRef.get(i).getPosY()+(((bulletRef.get(i).getDestY() - bulletRef.get(i).getOrigY())/200)*5));
+                    	}
+                    	
+                    	double newX = bulletRef.get(i).getPosX()+(((bulletRef.get(i).getDestX() - bulletRef.get(i).getOrigX())/200)*5);
+                    	if((newX >= 500)){
+                    		bulletRef.get(i).setPosX(500);
+                    	} else if(newX <= -500){
+                    		bulletRef.get(i).setPosX(-500);
+                    	} else {
+                    		bulletRef.get(i).setPosX(bulletRef.get(i).getPosX()+(((bulletRef.get(i).getDestX() - bulletRef.get(i).getOrigX())/200)*5));
+                    	}
+                        	
                     	bullets.get(i).setTranslateY(bulletRef.get(i).getPosY());
                     	bullets.get(i).setTranslateX(bulletRef.get(i).getPosX());
                     	bulletLife.set(i, bulletLife.get(i) + 1); //increment life by 1
 					}
                     
                     for(int i = bullets.size() - 1; i >= 0; i--){
-                    	if(bulletLife.get(i) > 200){
+                    	ProjectileObject ref = bulletRef.get(i);
+                    	if(bulletLife.get(i) > 200 || ref.getPosX() <= -500 || ref.getPosX() >= 500 || ref.getPosY() >= 400 || ref.getPosY() <= -400){
                     		pane.getChildren().remove(bullets.get(i));
                     		bullets.remove(i);
                     		bulletRef.remove(i);

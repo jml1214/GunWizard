@@ -228,6 +228,10 @@ public class Map extends Application{
 		//enemy bullets
 		ArrayList<Rectangle> eBullets = new ArrayList<Rectangle>();
 		ArrayList<ProjectileObject> eBulletRef = new ArrayList<ProjectileObject>();
+		
+		//enemies
+				ArrayList<Rectangle> enemies = new ArrayList<Rectangle>();
+				ArrayList<CharacterObject> enemiesRef = new ArrayList<CharacterObject>();
 
 		//File and ImageView for the skill screen
 		File ssFile = new File("skills_screen.png");
@@ -249,7 +253,8 @@ public class Map extends Application{
 		userPlace.setFill(Color.BLUE);
 		userPlace.setStroke(Color.BLACK);
 		pane.getChildren().add(userPlace);
-
+		
+		//enemy 1
 		Rectangle evil = new Rectangle(50,50);
 		CharacterObject evilRef = new CharacterObject();
 		evilRef.setPosX(0);
@@ -260,6 +265,26 @@ public class Map extends Application{
 		evil.setFill(Color.PURPLE);
 		evil.setStroke(Color.BLACK);
 		pane.getChildren().add(evil);
+		
+		//enemy 2
+		Rectangle evil2 = new Rectangle(50,50);
+		CharacterObject evilRef2 = new CharacterObject();
+		evilRef2.setPosX(-200);
+		evilRef2.setPosY(-300);
+		evilRef2.setHealth(50);
+		evil.setTranslateX(evilRef2.getPosX());
+		evil.setTranslateY(evilRef2.getPosY());
+		evil.setFill(Color.PURPLE);
+		evil.setStroke(Color.BLACK);
+		pane.getChildren().add(evil2);
+		
+		//add enemies to list
+		enemies.add(evil);
+		enemiesRef.add(evilRef);
+				
+		enemies.add(evil2);
+		enemiesRef.add(evilRef2);
+
 
 		//Start of this push
 		Rectangle healthBar = new Rectangle(evilRef.getHealth(), 15);
@@ -888,67 +913,78 @@ public class Map extends Application{
 			public void handle(long now){
 				if (now - lastUpdate >= 100_000_000) {
 					lastUpdate = now ;
-					evil.setFill(Color.PURPLE);
-					int n = rand.nextInt(4);
-					if(n == 0){
-						evilRef.setPosY(evilRef.getPosY()-10);
-						evil.setTranslateY(evilRef.getPosY());
-					}
-					else if(n == 1){
-						evilRef.setPosY(evilRef.getPosY()+10);
-						evil.setTranslateY(evilRef.getPosY());
-					}
-					else if(n == 2){
-						evilRef.setPosX(evilRef.getPosX()-10);
-						evil.setTranslateX(evilRef.getPosX());
-					}
-					else if(n == 3){
-						evilRef.setPosX(evilRef.getPosX()+10);
-						evil.setTranslateX(evilRef.getPosX());
-					}
-
-					//shoot
-					if(now - lastShot >= 1200_000_000){
-						lastShot = now;
-						Rectangle rect1 = new Rectangle();
-						ProjectileObject shot = new ProjectileObject(0, evilRef, userChar.getPosX(), userChar.getPosY(), evilRef.getPosX(), evilRef.getPosY());
-						shot.setPosX(evilRef.getPosX());
-						shot.setPosY(evilRef.getPosY());
-						rect1.setWidth(5);
-						rect1.setHeight(5);
-						rect1.setFill(Color.RED);
-						rect1.setStroke(Color.BLACK);
-						rect1.setTranslateX(shot.getPosX());
-						rect1.setTranslateY(shot.getPosY());
-						pane.getChildren().add(rect1);
-						rect1.requestFocus();
-						eBullets.add(rect1);
-						eBulletRef.add(shot);
-
-					}
-
-					for(int i = 0; i < bullets.size(); i++){
-						double leftBound = evilRef.getPosX() - (evilRef.getSizeX()/2);
-						double rightBound = evilRef.getPosX() + (evilRef.getSizeY()/2);
-						double topBound = evilRef.getPosY() - (evilRef.getSizeY()/2);
-						double bottomBound = evilRef.getPosY() + (evilRef.getSizeY()/2);
-						ProjectileObject bullet_ = bulletRef.get(i);
-						if(bullet_.getPosX() >= leftBound && bullet_.getPosX() <= rightBound){ //falls in between right and left bounds
-							if(bullet_.getPosY() >= topBound && bullet_.getPosY() <= bottomBound){
-								if(now - lastHit >= 300_000_000){ //invulnerable period
-									lastHit = now;
-									evil.setFill(Color.AQUA);
-									evilRef.reduceHealth(10);
-									healthBarRef.setPosX(healthBarRef.getPosX()-5);
-									healthBar.setTranslateX(healthBarRef.getPosX());
-									healthBar.setWidth(evilRef.getHealth());
+					for(int j =0; j < enemies.size(); j++){
+						Rectangle enemy = enemies.get(j);
+						CharacterObject enemyRef = enemiesRef.get(j);
+						enemy.setFill(Color.PURPLE);
+						int n = rand.nextInt(4);
+						if(n == 0){
+							enemyRef.setPosY(enemyRef.getPosY()-10);
+							enemy.setTranslateY(enemyRef.getPosY());
+						}
+						else if(n == 1){
+							enemyRef.setPosY(enemyRef.getPosY()+10);
+							enemy.setTranslateY(enemyRef.getPosY());
+						}
+						else if(n == 2){
+							enemyRef.setPosX(enemyRef.getPosX()-10);
+							enemy.setTranslateX(enemyRef.getPosX());
+						}
+						else if(n == 3){
+							enemyRef.setPosX(enemyRef.getPosX()+10);
+							enemy.setTranslateX(enemyRef.getPosX());
+						}
+	
+						for(int i = 0; i < bullets.size(); i++){
+							double leftBound = enemyRef.getPosX() - (enemyRef.getSizeX()/2);
+							double rightBound = enemyRef.getPosX() + (enemyRef.getSizeY()/2);
+							double topBound = enemyRef.getPosY() - (enemyRef.getSizeY()/2);
+							double bottomBound = enemyRef.getPosY() + (enemyRef.getSizeY()/2);
+							ProjectileObject bullet_ = bulletRef.get(i);
+							if(bullet_.getPosX() >= leftBound && bullet_.getPosX() <= rightBound){ //falls in between right and left bounds
+								if(bullet_.getPosY() >= topBound && bullet_.getPosY() <= bottomBound){
+									if(now - lastHit >= 300_000_000){ //invulnerable period
+										lastHit = now;
+										enemy.setFill(Color.AQUA);
+										enemyRef.reduceHealth(10);
+										healthBarRef.setPosX(healthBarRef.getPosX()-5);
+										healthBar.setTranslateX(healthBarRef.getPosX());
+										healthBar.setWidth(enemyRef.getHealth());
+									}
 								}
 							}
 						}
-						if(evilRef.getHealth() == 0){
-							pane.getChildren().remove(evil);
+					}
+					
+					//remove the dead enemies
+					for(int i = enemies.size() - 1; i >= 0; i--){
+						if(enemiesRef.get(i).getHealth() == 0){
+							pane.getChildren().remove(enemies.get(i));
+							enemies.remove(i);
+							enemiesRef.remove(i);
 							break;
 						}
+					}
+					//enemies shooting
+					if(now - lastShot >= 2000_000_000){
+						for(int k = 0; k < enemies.size(); k++){
+								CharacterObject enemyRef = enemiesRef.get(k);
+								Rectangle rect1 = new Rectangle();
+								ProjectileObject shot = new ProjectileObject(0, enemyRef, userChar.getPosX(), userChar.getPosY(), enemyRef.getPosX(), enemyRef.getPosY());
+								shot.setPosX(enemyRef.getPosX());
+								shot.setPosY(enemyRef.getPosY());
+								rect1.setWidth(5);
+								rect1.setHeight(5);
+								rect1.setFill(Color.RED);
+								rect1.setStroke(Color.BLACK);
+								rect1.setTranslateX(shot.getPosX());
+								rect1.setTranslateY(shot.getPosY());
+								pane.getChildren().add(rect1);
+								rect1.requestFocus();
+								eBullets.add(rect1);
+								eBulletRef.add(shot);
+						}
+						lastShot = now;
 					}
 				}
 			}

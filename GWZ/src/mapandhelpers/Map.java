@@ -805,7 +805,7 @@ public class Map extends Application{
 		primaryStage.show();
 
 		//update projetiles
-		new AnimationTimer(){
+		AnimationTimer projectilesUpdate = new AnimationTimer(){
 			private long lastUpdate = 0;
 			private long lastDamageTaken = 0;
 			@Override
@@ -910,7 +910,7 @@ public class Map extends Application{
 									}
 									System.out.println("Ouch!");
 									if(userChar.getHealth() <= 0){
-										System.out.println("END GAME!");
+										System.out.println("Dead!");
 									}
 								}
 							}
@@ -927,11 +927,11 @@ public class Map extends Application{
 					}
 				}
 			}
-		}.start();
+		};
 
 
 		//control of enemies
-		new AnimationTimer(){
+		AnimationTimer enemiesUpdate = new AnimationTimer(){
 			private long lastUpdate = 0;
 			private long lastHit = 0;
 			private long lastShot = 0;
@@ -939,6 +939,7 @@ public class Map extends Application{
 			public void handle(long now){
 				if (now - lastUpdate >= 100_000_000) {
 					lastUpdate = now ;
+					
 					for(int j =0; j < enemies.size(); j++){
 						Rectangle enemy = enemies.get(j);
 						CharacterObject enemyRef = enemiesRef.get(j);
@@ -996,6 +997,19 @@ public class Map extends Application{
 							break;
 						}
 					}
+					
+					if(enemies.isEmpty()){ //all enemies in stage killed
+						if(state >= 4){ //last stage
+							//end of game
+							System.out.println("End of Game");
+						} else {
+						System.out.println(state);
+						projectilesUpdate.stop();
+						gameScreen(primaryStage, userChar, state + 1);
+						this.stop();
+						}
+					}
+						
 					//enemies shooting
 					if(now - lastShot >= 2000_000_000){
 						for(int k = 0; k < enemies.size(); k++){
@@ -1019,8 +1033,10 @@ public class Map extends Application{
 					}
 				}
 			}
-		}.start();
-
+		};
+		
+		projectilesUpdate.start();
+		enemiesUpdate.start();
 	}
 
 	public void skillScreen(Stage primaryStage, Pane pane){

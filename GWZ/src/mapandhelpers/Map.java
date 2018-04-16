@@ -166,7 +166,7 @@ public class Map extends Application{
 		login.setOnAction((event) -> {
 			if(checkUser(userName.getText())){
 				if(checkPass(userName.getText(), passWord.getText())){
-					gameScreen(primaryStage, new CharacterObject());
+					gameScreen(primaryStage, new CharacterObject(), 0);
 				}
 				else{
 					loginScreen(primaryStage, 2);
@@ -187,12 +187,38 @@ public class Map extends Application{
 		primaryStage.show();
 	}
 
-	public void gameScreen(Stage primaryStage, CharacterObject userChar){
+	public void gameScreen(Stage primaryStage, CharacterObject userChar, int state){
 		Random rand = new Random();
 		Pane pane = new StackPane();
 		BackgroundFill a = new BackgroundFill(Color.WHITE, null, null);
 		Background background = new Background(new BackgroundFill[] {a});
 		pane.setBackground(background);
+		
+		if(state == 0 || state == 2){
+			File grassyBackdrop = new File("grass_road_1.png");
+			ImageView gBack = new ImageView(new Image(grassyBackdrop.toURI().toString(),viewSizeX,viewSizeY,false,false));
+			gBack.setTranslateX(0);
+			gBack.setTranslateY(0);
+			pane.getChildren().add(gBack);
+		}
+		else if(state == 1 || state == 3){
+			File grassyBackdrop = new File("grass_road_2.png");
+			ImageView gBack = new ImageView(new Image(grassyBackdrop.toURI().toString(),viewSizeX,viewSizeY,false,false));
+			gBack.setTranslateX(0);
+			gBack.setTranslateY(0);
+			pane.getChildren().add(gBack);
+		}
+		else if(state == 4){
+			File grassyBackdrop = new File("grass_road_3.png");
+			ImageView gBack = new ImageView(new Image(grassyBackdrop.toURI().toString(),viewSizeX,viewSizeY,false,false));
+			gBack.setTranslateX(0);
+			gBack.setTranslateY(0);
+			pane.getChildren().add(gBack);
+			File tower = new File("wizard_tower.png");
+			ImageView twr = new ImageView(new Image(tower.toURI().toString(),100,200,false,false));
+			twr.setTranslateY(-200);
+			pane.getChildren().add(twr);
+		}
 
 		//player bullets
 		ArrayList<Rectangle> bullets = new ArrayList<Rectangle>();

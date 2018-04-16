@@ -5,8 +5,8 @@ public class ActorObject {
 	private double sizeX;
 	private double sizeY;
 	private String name;
-	private int posX;
-	private int posY;
+	private double posX;
+	private double posY;
 	
 	public static int objectsInstantiated = 0;
 	
@@ -44,7 +44,7 @@ public class ActorObject {
 		return sizeY;
 	}
 	
-	public boolean setPosX(int x){
+	public boolean setPosX(double x){
 		if(x >= -500 && x <= 500){
 			posX = x;
 			return true;
@@ -52,7 +52,7 @@ public class ActorObject {
 		return false;
 	}
 	
-	public boolean setPosY(int y){
+	public boolean setPosY(double y){
 		if(y >= -400 && y <= 400){
 			posY = y;
 			return true;
@@ -60,11 +60,11 @@ public class ActorObject {
 		return false;
 	}
 	
-	public int getPosX(){
+	public double getPosX(){
 		return posX;
 	}
 	
-	public int getPosY(){
+	public double getPosY(){
 		return posY;
 	}
 }

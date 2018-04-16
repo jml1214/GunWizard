@@ -234,75 +234,13 @@ public class Map extends Application{
 	    pane.getChildren().add(akIv);
 	    ak47.setPosX(userChar.getPosX()+50);
 	    akIv.setTranslateX(ak47.getPosX()+50);
-		
-		Button b = new Button();
-		b.setText("Enter");
-		b.setTranslateX(0);
-		b.setTranslateY(300);
-		b.setStyle("-fx-font-size:40; -fx-background-color:red;");
-//		b.setMaxWidth(200);
-//		b.setMaxHeight(200);
-		pane.getChildren().add(b);
-				
-		b.setOnAction((event) -> {
-			userPlace.setTranslateY(0);
-			userPlace.setTranslateX(0);
-			userChar.setPosY(0);
-			userChar.setPosX(0);
-		});
-		
-		
-		
+	
 		Scene scene = new Scene(pane, viewSizeX, viewSizeY);
-		
 		
 		scene.setOnMousePressed(new EventHandler<MouseEvent>(){
 			@Override public void handle(MouseEvent event) {
-		        
-		      }
-		});
-
-		scene.setOnKeyPressed(e -> {
-			switch (e.getCode()){
-			case DOWN:
-				userPlace.requestFocus();
-				userChar.setPosY(userChar.getPosY()+100);
-				userPlace.setTranslateY(userChar.getPosY());
-				
-				akIv.requestFocus();
-				ak47.setPosY(userChar.getPosY()+50);
-				akIv.setTranslateY(ak47.getPosY());
-				break;
-			case UP:
-				userPlace.requestFocus();
-				userChar.setPosY(userChar.getPosY()-100);
-				userPlace.setTranslateY(userChar.getPosY());
-				
-				akIv.requestFocus();
-				ak47.setPosY(userChar.getPosY()-50);
-				akIv.setTranslateY(ak47.getPosY());
-				break;
-			case RIGHT:
-				userPlace.requestFocus();
-				userChar.setPosX(userChar.getPosX()+100);
-				userPlace.setTranslateX(userChar.getPosX());
-				
-				akIv.requestFocus();
-				ak47.setPosX(userChar.getPosX()+50);
-				akIv.setTranslateX(ak47.getPosX());
-				break;
-			case LEFT:
-				userPlace.requestFocus();
-				userChar.setPosX(userChar.getPosX()-100);
-				userPlace.setTranslateX(userChar.getPosX());
-				
-				akIv.requestFocus();
-				ak47.setPosX(userChar.getPosX()-50);
-				akIv.setTranslateX(ak47.getPosX());
-				break;
-			case W:
 				Rectangle rect1 = new Rectangle();
-				ProjectileObject rectRef = new ProjectileObject(0, userChar);
+				ProjectileObject rectRef = new ProjectileObject(0, userChar, event.getSceneX()-500, event.getSceneY()-400, userChar.getPosX(), userChar.getPosY());
 				rectRef.setPosX(rectRef.getChar().getPosX());
 				rectRef.setPosY(rectRef.getChar().getPosY());
 				rect1.setWidth(5);
@@ -316,57 +254,46 @@ public class Map extends Application{
 				bullets.add(rect1);
 				bulletRef.add(rectRef);
 				bulletLife.add(0);
-				break;
+		      }
+		});
+
+		scene.setOnKeyPressed(e -> {
+			switch (e.getCode()){
 			case S:
-				Rectangle rect2 = new Rectangle();
-				ProjectileObject rectRef2 = new ProjectileObject(1, userChar);
-				rectRef2.setPosX(rectRef2.getChar().getPosX());
-				rectRef2.setPosY(rectRef2.getChar().getPosY());
-				rect2.setWidth(5);
-				rect2.setHeight(5);
-				rect2.setFill(Color.YELLOW);
-				rect2.setStroke(Color.BLACK);
-				rect2.setTranslateX(rectRef2.getPosX());
-				rect2.setTranslateY(rectRef2.getPosY());
-				pane.getChildren().add(rect2);
-				rect2.requestFocus();
-				bullets.add(rect2);
-				bulletRef.add(rectRef2);
-				bulletLife.add(0);
+				userPlace.requestFocus();
+				userChar.setPosY(userChar.getPosY()+100);
+				userPlace.setTranslateY(userChar.getPosY());
+				
+				akIv.requestFocus();
+				ak47.setPosY(userChar.getPosY()+50);
+				akIv.setTranslateY(ak47.getPosY());
 				break;
-			case A:
-				Rectangle rect3 = new Rectangle();
-				ProjectileObject rectRef3 = new ProjectileObject(2, userChar);
-				rectRef3.setPosX(rectRef3.getChar().getPosX());
-				rectRef3.setPosY(rectRef3.getChar().getPosY());
-				rect3.setWidth(5);
-				rect3.setHeight(5);
-				rect3.setFill(Color.YELLOW);
-				rect3.setStroke(Color.BLACK);
-				rect3.setTranslateX(rectRef3.getPosX());
-				rect3.setTranslateY(rectRef3.getPosY());
-				pane.getChildren().add(rect3);
-				rect3.requestFocus();
-				bullets.add(rect3);
-				bulletRef.add(rectRef3);
-				bulletLife.add(0);
+			case W:
+				userPlace.requestFocus();
+				userChar.setPosY(userChar.getPosY()-100);
+				userPlace.setTranslateY(userChar.getPosY());
+				
+				akIv.requestFocus();
+				ak47.setPosY(userChar.getPosY()-50);
+				akIv.setTranslateY(ak47.getPosY());
 				break;
 			case D:
-				Rectangle rect4 = new Rectangle();
-				ProjectileObject rectRef4 = new ProjectileObject(3, userChar);
-				rectRef4.setPosX(rectRef4.getChar().getPosX());
-				rectRef4.setPosY(rectRef4.getChar().getPosY());
-				rect4.setWidth(5);
-				rect4.setHeight(5);
-				rect4.setFill(Color.YELLOW);
-				rect4.setStroke(Color.BLACK);
-				rect4.setTranslateX(rectRef4.getPosX());
-				rect4.setTranslateY(rectRef4.getPosY());
-				pane.getChildren().add(rect4);
-				rect4.requestFocus();
-				bullets.add(rect4);
-				bulletRef.add(rectRef4);
-				bulletLife.add(0);
+				userPlace.requestFocus();
+				userChar.setPosX(userChar.getPosX()+100);
+				userPlace.setTranslateX(userChar.getPosX());
+				
+				akIv.requestFocus();
+				ak47.setPosX(userChar.getPosX()+50);
+				akIv.setTranslateX(ak47.getPosX());
+				break;
+			case A:
+				userPlace.requestFocus();
+				userChar.setPosX(userChar.getPosX()-100);
+				userPlace.setTranslateX(userChar.getPosX());
+				
+				akIv.requestFocus();
+				ak47.setPosX(userChar.getPosX()-50);
+				akIv.setTranslateX(ak47.getPosX());
 				break;
 			case P:
 				if(pane.getChildren().contains(ssIv)){
@@ -391,26 +318,11 @@ public class Map extends Application{
 				if (now - lastUpdate >= 10_000_000) {
                     lastUpdate = now ;
                     for(int i= 0; i < bullets.size(); i++){
-                    	if(bulletRef.get(i).getOrient() == 0){
-                    		bulletRef.get(i).setPosY(bulletRef.get(i).getPosY()-5);
-                    		bullets.get(i).setTranslateY(bulletRef.get(i).getPosY());
-                    		bulletLife.set(i, bulletLife.get(i) + 1); //increment life by 1
-                    	}
-                    	else if(bulletRef.get(i).getOrient() == 1){
-                    		bulletRef.get(i).setPosY(bulletRef.get(i).getPosY()+5);
-                    		bullets.get(i).setTranslateY(bulletRef.get(i).getPosY());
-                    		bulletLife.set(i, bulletLife.get(i) + 1); //increment life by 1
-                    	}
-                    	else if(bulletRef.get(i).getOrient() == 2){
-                    		bulletRef.get(i).setPosX(bulletRef.get(i).getPosX()-5);
-                    		bullets.get(i).setTranslateX(bulletRef.get(i).getPosX());
-                    		bulletLife.set(i, bulletLife.get(i) + 1); //increment life by 1
-                    	}
-                    	else if(bulletRef.get(i).getOrient() == 3){
-                    		bulletRef.get(i).setPosX(bulletRef.get(i).getPosX()+5);
-                    		bullets.get(i).setTranslateX(bulletRef.get(i).getPosX());
-                    		bulletLife.set(i, bulletLife.get(i) + 1); //increment life by 1	
-                    	}
+                    	bulletRef.get(i).setPosY(bulletRef.get(i).getPosY()+(((bulletRef.get(i).getDestY() - bulletRef.get(i).getOrigY())/200)*5));
+                    	bulletRef.get(i).setPosX(bulletRef.get(i).getPosX()+(((bulletRef.get(i).getDestX() - bulletRef.get(i).getOrigX())/200)*5));                   	
+                    	bullets.get(i).setTranslateY(bulletRef.get(i).getPosY());
+                    	bullets.get(i).setTranslateX(bulletRef.get(i).getPosX());
+                    	bulletLife.set(i, bulletLife.get(i) + 1); //increment life by 1
 					}
                     
                     for(int i = bullets.size() - 1; i >= 0; i--){

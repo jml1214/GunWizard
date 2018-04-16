@@ -166,7 +166,7 @@ public class Map extends Application{
 		login.setOnAction((event) -> {
 			if(checkUser(userName.getText())){
 				if(checkPass(userName.getText(), passWord.getText())){
-					gameScreen(primaryStage, new CharacterObject(), 0);
+					gameScreen(primaryStage, new CharacterObject(), 4);
 				}
 				else{
 					loginScreen(primaryStage, 2);
@@ -215,8 +215,8 @@ public class Map extends Application{
 			gBack.setTranslateY(0);
 			pane.getChildren().add(gBack);
 			File tower = new File("wizard_tower.png");
-			ImageView twr = new ImageView(new Image(tower.toURI().toString(),100,200,false,false));
-			twr.setTranslateY(-200);
+			ImageView twr = new ImageView(new Image(tower.toURI().toString(),200,350,false,false));
+			twr.setTranslateY(-250);
 			pane.getChildren().add(twr);
 		}
 

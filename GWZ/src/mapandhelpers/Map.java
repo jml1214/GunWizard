@@ -193,9 +193,14 @@ public class Map extends Application{
 		Background background = new Background(new BackgroundFill[] {a});
 		pane.setBackground(background);
 		
+		//player bullets
 		ArrayList<Rectangle> bullets = new ArrayList<Rectangle>();
 		ArrayList<ProjectileObject> bulletRef = new ArrayList<ProjectileObject>();
 		ArrayList<Integer> bulletLife = new ArrayList<Integer>();
+		
+		//enemy bullets
+		ArrayList<Rectangle> eBullets = new ArrayList<Rectangle>();
+		ArrayList<ProjectileObject> eBulletRef = new ArrayList<ProjectileObject>();
 		
 		//File and ImageView for the skill screen
 		File ssFile = new File("skills_screen.png");
@@ -457,12 +462,16 @@ public class Map extends Application{
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		
+		//update projetiles
 		new AnimationTimer(){
 			private long lastUpdate = 0;
+			private long lastDamageTaken = 0;
 			@Override
 			public void handle(long now){
 				if (now - lastUpdate >= 10_000_000) {
                     lastUpdate = now ;
+                    
+                    //player bullets
                     for(int i= 0; i < bullets.size(); i++){
                     	double dy = bulletRef.get(i).getDestY() - bulletRef.get(i).getOrigY();
                     	double dx = bulletRef.get(i).getDestX() - bulletRef.get(i).getOrigX();
@@ -506,13 +515,79 @@ public class Map extends Application{
                     		bulletLife.remove(i);
                     	}
                     }
+                    
+                  //enemy bullets
+                    for(int i = 0; i < eBullets.size(); i++){
+                    	double dy = eBulletRef.get(i).getDestY() - eBulletRef.get(i).getOrigY();
+                    	double dx = eBulletRef.get(i).getDestX() - eBulletRef.get(i).getOrigX();
+                    	double distance = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+                    	double speedMult = 5 / distance;
+                    	
+                    	//scaled to be same speed
+                    	dy = dy * speedMult;
+                    	dx = dx * speedMult;
+                    	
+                    	double newY = eBulletRef.get(i).getPosY() + dy;
+                    	//ensure projectile moves to end of screen
+                    	if((newY >= 400)){
+                    		eBulletRef.get(i).setPosY(400);
+                    	} else if(newY <= -400){
+                    		eBulletRef.get(i).setPosY(-400);
+                    	} else {
+                    		eBulletRef.get(i).setPosY(newY);
+                    	}
+                    	
+                    	double newX = eBulletRef.get(i).getPosX() + dx;
+                    	if((newX >= 500)){
+                    		eBulletRef.get(i).setPosX(500);
+                    	} else if(newX <= -500){
+                    		eBulletRef.get(i).setPosX(-500);
+                    	} else {
+                    		eBulletRef.get(i).setPosX(newX);
+                    	}
+                        	
+                    	eBullets.get(i).setTranslateY(eBulletRef.get(i).getPosY());
+                    	eBullets.get(i).setTranslateX(eBulletRef.get(i).getPosX());
+                    	
+                    	//check if player was hit
+                    	//player hitbox (square with side of length 70 (fits in circle))
+                    	double leftBound = userChar.getPosX() - (35);
+                    	double rightBound = userChar.getPosX() + (35);
+                    	double topBound = userChar.getPosY() - (35);
+                    	double bottomBound = userChar.getPosY() + (35);
+                    	ProjectileObject bullet_ = eBulletRef.get(i);
+                    	if(bullet_.getPosX() >= leftBound && bullet_.getPosX() <= rightBound){
+                    		if(bullet_.getPosY() >= topBound && bullet_.getPosY() <= bottomBound){
+                    			if(now -lastDamageTaken >= 1000_000_000){
+                    				lastDamageTaken = now;
+		                    		userChar.reduceHealth(10);
+		                    		System.out.println("Ouch!");
+		                    		if(userChar.getHealth() <= 0){
+		                    			System.out.println("END GAME!");
+		                    		}
+                    			}
+                    		}
+                    	}
+                    }
+                    
+                    for(int i = eBullets.size() - 1; i >= 0; i--){
+                    	ProjectileObject ref = eBulletRef.get(i);
+                    	if(ref.getPosX() <= -500 || ref.getPosX() >= 500 || ref.getPosY() >= 400 || ref.getPosY() <= -400){
+                    		pane.getChildren().remove(eBullets.get(i));
+                    		eBullets.remove(i);
+                    		eBulletRef.remove(i);
+                    	}
+                    }
                 }
 			}
 		}.start();
 		
+		
+		//control of enemies
 		new AnimationTimer(){
 			private long lastUpdate = 0;
 			private long lastHit = 0;
+			private long lastShot = 0;
 			@Override
 			public void handle(long now){
 				if (now - lastUpdate >= 100_000_000) {
@@ -535,6 +610,27 @@ public class Map extends Application{
                 		evilRef.setPosX(evilRef.getPosX()+10);
                 		evil.setTranslateX(evilRef.getPosX());
                 	}
+                    
+                    //shoot
+                    if(now - lastShot >= 1200_000_000){
+                    	lastShot = now;
+                    	Rectangle rect1 = new Rectangle();
+                    	ProjectileObject shot = new ProjectileObject(0, evilRef, userChar.getPosX(), userChar.getPosY(), evilRef.getPosX(), evilRef.getPosY());
+        				shot.setPosX(evilRef.getPosX());
+        				shot.setPosY(evilRef.getPosY());
+        				rect1.setWidth(5);
+        				rect1.setHeight(5);
+        				rect1.setFill(Color.RED);
+        				rect1.setStroke(Color.BLACK);
+        				rect1.setTranslateX(shot.getPosX());
+        				rect1.setTranslateY(shot.getPosY());
+        				pane.getChildren().add(rect1);
+        				rect1.requestFocus();
+        				eBullets.add(rect1);
+        				eBulletRef.add(shot);
+                    	
+                    }
+                    
                     for(int i = 0; i < bullets.size(); i++){
                     	double leftBound = evilRef.getPosX() - (evilRef.getSizeX()/2);
                     	double rightBound = evilRef.getPosX() + (evilRef.getSizeY()/2);

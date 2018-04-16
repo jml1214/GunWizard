@@ -143,20 +143,18 @@ public class Map extends Application{
 	    pane.getChildren().add(passWord);
 	    
 	    Button login = new Button();
-		login.setText("Login");
 		login.setTranslateX(-175);
 		login.setTranslateY(275);
-		login.setStyle("-fx-font-size:40; -fx-background-color:red;");
+		login.setStyle("-fx-font-size:40; -fx-background-color:none;");
 		login.setMaxWidth(200);
 		login.setMaxHeight(50);
 		login.setVisible(true);
 		pane.getChildren().add(login);
 		
 		Button exit = new Button();
-		exit.setText("Exit");
 		exit.setTranslateX(295);
 		exit.setTranslateY(275);
-		exit.setStyle("-fx-font-size:40; -fx-background-color:red;");
+		exit.setStyle("-fx-font-size:40; -fx-background-color:none;");
 		exit.setMaxWidth(200);
 		exit.setMaxHeight(50);
 		exit.setVisible(true);
@@ -202,6 +200,12 @@ public class Map extends Application{
 		//File and ImageView for the skill screen
 		File ssFile = new File("skills_screen.png");
 		ImageView ssIv = new ImageView(new Image(ssFile.toURI().toString(),viewSizeX,viewSizeY,false,false));
+		ssIv.setTranslateX(0);
+		ssIv.setTranslateY(0);
+		
+		//File and ImageView for Pause Menu
+		File pFile = new File("Pause_Menu.png");
+		ImageView pView = new ImageView(new Image(pFile.toURI().toString(),viewSizeX/2,viewSizeY,false,false));
 		ssIv.setTranslateX(0);
 		ssIv.setTranslateY(0);
 		
@@ -301,6 +305,14 @@ public class Map extends Application{
 				}
 				else{
 					pane.getChildren().add(ssIv);
+				}
+				break;
+			case ESCAPE:
+				if(pane.getChildren().contains(pView)){
+					pane.getChildren().remove(pView);
+				}
+				else{
+					pane.getChildren().add(pView);
 				}
 				break;
 			default:

@@ -364,24 +364,32 @@ public class Map extends Application{
 				if (now - lastUpdate >= 10_000_000) {
                     lastUpdate = now ;
                     for(int i= 0; i < bullets.size(); i++){
+                    	double dy = bulletRef.get(i).getDestY() - bulletRef.get(i).getOrigY();
+                    	double dx = bulletRef.get(i).getDestX() - bulletRef.get(i).getOrigX();
+                    	double distance = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+                    	double speedMult = 5 / distance;
                     	
-                    	double newY = bulletRef.get(i).getPosY()+(((bulletRef.get(i).getDestY() - bulletRef.get(i).getOrigY())/200)*5);
+                    	//scaled to be same speed
+                    	dy = dy * speedMult;
+                    	dx = dx * speedMult;
+                    	
+                    	double newY = bulletRef.get(i).getPosY() + dy;
                     	//ensure projectile moves to end of screen
                     	if((newY >= 400)){
                     		bulletRef.get(i).setPosY(400);
                     	} else if(newY <= -400){
                     		bulletRef.get(i).setPosY(-400);
                     	} else {
-                    		bulletRef.get(i).setPosY(bulletRef.get(i).getPosY()+(((bulletRef.get(i).getDestY() - bulletRef.get(i).getOrigY())/200)*5));
+                    		bulletRef.get(i).setPosY(newY);
                     	}
                     	
-                    	double newX = bulletRef.get(i).getPosX()+(((bulletRef.get(i).getDestX() - bulletRef.get(i).getOrigX())/200)*5);
+                    	double newX = bulletRef.get(i).getPosX() + dx;
                     	if((newX >= 500)){
                     		bulletRef.get(i).setPosX(500);
                     	} else if(newX <= -500){
                     		bulletRef.get(i).setPosX(-500);
                     	} else {
-                    		bulletRef.get(i).setPosX(bulletRef.get(i).getPosX()+(((bulletRef.get(i).getDestX() - bulletRef.get(i).getOrigX())/200)*5));
+                    		bulletRef.get(i).setPosX(newX);
                     	}
                         	
                     	bullets.get(i).setTranslateY(bulletRef.get(i).getPosY());

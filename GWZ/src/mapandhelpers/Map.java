@@ -37,8 +37,7 @@ public class Map extends Application{
 
 	final public static int viewSizeX = 1000;
 	final public static int viewSizeY = 800;
-	public static void main(String[] args){
-		//System.out.println(javafx.scene.text.Font.getFamilies());
+	public static void main(String[] args){		
 		launch(args);
 	}
 
@@ -70,7 +69,7 @@ public class Map extends Application{
 
 		//Logo
 		Text wizLogo = new Text(500,400,"GUNWIZARD");
-		wizLogo.setFont(Font.font("Comic Sans MS", 100));
+		wizLogo.setFont(Font.font("Apple Chancery", 100));
 		wizLogo.setFill(Color.RED);
 		wizLogo.setStroke(Color.ANTIQUEWHITE);
 		pane.getChildren().add(wizLogo);

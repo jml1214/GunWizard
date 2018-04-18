@@ -30,6 +30,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.scene.input.MouseEvent;
 
@@ -91,11 +92,49 @@ public class Map extends Application{
 		// Button press
 		b.setOnAction((event) -> {
 			mediaPlayer.play();
-			loginScreen(primaryStage, 0);
+			explanationScreen(primaryStage);
 		});
 
 		//Finalizing view
 		primaryStage.setTitle("Gunwizard");
+		primaryStage.setScene(scene);
+		primaryStage.show();
+
+	}
+	
+	public void explanationScreen(Stage primaryStage){
+		Pane pane = new StackPane();
+
+		//Background
+		BackgroundFill a = new BackgroundFill(Color.GREY, null, null);
+		Background background = new Background(new BackgroundFill[] {a});
+		pane.setBackground(background);
+
+		//Setting view sizes and instantiating the scene object for title screen
+		Scene scene = new Scene(pane, viewSizeX, viewSizeY);
+		
+		Text wizLogo = new Text(500,500,"You are a wizard who is bad at magic\n"
+				+ "To compensate, you must use your AK-47 to defeat the evil wizard\n"
+				+ "squares. Prove your worth and claim your rightful place at the\n"
+				+ "Wizard Tower");
+		wizLogo.setFont(Font.font("Apple Chancery", 30));
+		wizLogo.setFill(Color.WHITE);
+		wizLogo.setTextAlignment(TextAlignment.CENTER);
+		pane.getChildren().add(wizLogo);
+
+		//Button to enter main menu
+		Button b = new Button();
+		b.setText("Enter");
+		b.setTranslateX(0);
+		b.setTranslateY(300);
+		b.setStyle("-fx-font-size:40; -fx-background-color:red;");
+		pane.getChildren().add(b);
+
+		// Button press
+		b.setOnAction((event) -> {
+			loginScreen(primaryStage, 0);
+		});
+		
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
@@ -185,6 +224,8 @@ public class Map extends Application{
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
+	
+	
 
 	public void gameScreen(Stage primaryStage, CharacterObject userChar, int state){
 		Random rand = new Random();

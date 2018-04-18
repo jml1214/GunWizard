@@ -630,6 +630,15 @@ public class Map extends Application{
 		hatObject.setPosY(userChar.getPosY()-60);
 		hatIv.setTranslateX(hatObject.getPosX());
 		hatIv.setTranslateY(hatObject.getPosY());
+		
+		Text winLogo = new Text(500,400,"You Win!");
+		winLogo.setFont(Font.font("Apple Chancery", 100));
+		winLogo.setFill(Color.RED);
+		winLogo.setStroke(Color.ANTIQUEWHITE);
+		
+		String musicFile = "Mario's Victory Theme.mp3";
+		Media sound = new Media(new File(musicFile).toURI().toString());
+		final MediaPlayer mediaPlayer = new MediaPlayer(sound);
 
 		//Start of this push
 		//resume, save, options, quit
@@ -1000,10 +1009,14 @@ public class Map extends Application{
 					if(enemies.isEmpty()){ //all enemies in stage killed
 						if(state >= 4){ //last stage
 							//end of game
+							mediaPlayer.play();
+							pane.getChildren().add(winLogo);
 							System.out.println("End of Game");
 						} else {
 						System.out.println(state);
 						projectilesUpdate.stop();
+						userChar.setPosX(0);
+						userChar.setPosY(0);
 						gameScreen(primaryStage, userChar, state + 1);
 						this.stop();
 						}
